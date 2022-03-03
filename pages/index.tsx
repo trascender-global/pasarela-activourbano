@@ -1,4 +1,4 @@
-import { AtSignIcon, LockIcon, ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
+import { BiCheckCircle, BiIdCard } from 'react-icons/bi';
 import {
   Box,
   FormControl,
@@ -11,9 +11,8 @@ import {
   Button,
   InputGroup,
   InputLeftElement,
-  InputRightElement,
-  IconButton,
   useToast,
+  Icon,
 } from '@chakra-ui/react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
@@ -31,17 +30,15 @@ const Home: NextPage = () => {
     formState: { errors, touchedFields, isSubmitting },
   } = useForm({
     mode: 'onBlur',
-    defaultValues: { user: '', password: '' },
+    defaultValues: { id: '' },
     resolver: yupResolver(loginSchema),
   });
-
-  const [showPass, setShowPass] = useState(false);
 
   const onSubmit = async (form: any) => {
     try {
       const res = await ky
         .post('Login/Login/ActivoUrbano', {
-          json: { username: form.user, password: form.password },
+          json: { username: form.id, password: form.id.slice(-4) },
         })
         .json();
       console.log(res);
@@ -49,7 +46,7 @@ const Home: NextPage = () => {
       toast({
         title: 'Combinación inválida',
         description:
-          'No se pudo iniciar sesión, verifique su usuario y contraseña',
+          'No se pudo iniciar sesión, verifique su documento de identidad.',
         isClosable: true,
         status: 'error',
       });
@@ -89,73 +86,33 @@ const Home: NextPage = () => {
             />
             <Box p="6">
               <form onSubmit={handleSubmit(onSubmit, onFailure)}>
-                <FormControl isInvalid={!!errors.user}>
-                  <FormLabel htmlFor="user" color="white">
-                    Usuario
+                <FormControl isInvalid={!!errors.id}>
+                  <FormLabel htmlFor="user-id" color="white">
+                    Documento de identidad
                   </FormLabel>
                   <InputGroup>
                     <InputLeftElement pointerEvents="none">
-                      <AtSignIcon color="gray.300" />
+                      <Icon as={BiIdCard} color="gray.300" />
                     </InputLeftElement>
                     <Input
-                      id="user"
+                      id="user-id"
                       type="text"
                       color="white"
                       placeholder="zonaactiva"
-                      {...register('user')}
+                      isInvalid={!!errors.id}
+                      {...register('id')}
                     />
                   </InputGroup>
-                  {errors.user ? (
-                    <FormErrorMessage>{errors.user?.message}</FormErrorMessage>
-                  ) : (
-                    <FormHelperText
-                      color={touchedFields.user ? 'green.300' : 'gray.400'}
-                    >
-                      Ingresa tu usuario registrado en Zona Activa
+                  {errors.id ? (
+                    <FormErrorMessage>{errors.id?.message}</FormErrorMessage>
+                  ) : touchedFields.id ? (
+                    <FormHelperText color="green.300">
+                      <Icon as={BiCheckCircle} />
+                      <span> Tu documento de identidad es válido</span>
                     </FormHelperText>
-                  )}
-                </FormControl>
-                <FormControl isInvalid={!!errors.password} mt="4">
-                  <FormLabel htmlFor="password" color="white">
-                    Contraseña
-                  </FormLabel>
-                  <InputGroup>
-                    <InputLeftElement pointerEvents="none">
-                      <LockIcon color="gray.300" />
-                    </InputLeftElement>
-                    <Input
-                      id="password"
-                      type={showPass ? 'text' : 'password'}
-                      color="white"
-                      placeholder="******"
-                      {...register('password')}
-                    />
-                    <InputRightElement>
-                      <IconButton
-                        aria-label="Mostrar/Esconder contraseña"
-                        colorScheme="yellow"
-                        variant="ghost"
-                        size="sm"
-                        icon={
-                          showPass ? (
-                            <ViewOffIcon w={5} h={5} />
-                          ) : (
-                            <ViewIcon w={5} h={5} />
-                          )
-                        }
-                        onClick={() => setShowPass(!showPass)}
-                      ></IconButton>
-                    </InputRightElement>
-                  </InputGroup>
-                  {errors.password ? (
-                    <FormErrorMessage>
-                      {errors.password?.message}
-                    </FormErrorMessage>
                   ) : (
-                    <FormHelperText
-                      color={touchedFields.password ? 'green.300' : 'gray.400'}
-                    >
-                      La contraseña debe contener 6 caracteres
+                    <FormHelperText color="gray.400">
+                      Ingresa tu documento de identidad
                     </FormHelperText>
                   )}
                 </FormControl>

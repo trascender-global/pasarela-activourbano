@@ -2,11 +2,10 @@ import * as yup from 'yup';
 
 const schema = yup
     .object({
-        user: yup.string().required('El usuario es requerido'),
-        password: yup
-            .string()
-            .min(6, 'La contraseña debe contener mínimo 6 caracteres')
-            .required(),
+        id: yup.string()
+            .required('El documento de identidad es requerido.')
+            .matches(/^\d+$/, 'El documento sólo debe contener números.')
+            .min(4, 'El documento debe tener mínimo 4 dígitos.')
     })
     .required();
 
