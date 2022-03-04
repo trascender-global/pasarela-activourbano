@@ -13,6 +13,7 @@ import {
   InputLeftElement,
   useToast,
   Icon,
+  Tooltip,
 } from '@chakra-ui/react';
 import Head from 'next/head';
 import { useForm } from 'react-hook-form';
@@ -20,6 +21,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import loginSchema from '@schema/login.schema';
 import { signIn } from 'next-auth/react';
 import { NextPageAuth } from '@/types/AuthPages';
+import Link from 'next/link';
 
 const Login: NextPageAuth = () => {
   const toast = useToast();
@@ -71,11 +73,25 @@ const Login: NextPageAuth = () => {
             overflow="hidden"
             w={['100%', '480px', '640px', '720px']}
           >
-            <Image
-              src="/au_240.png"
-              alt="Activo Urbano"
-              style={{ margin: '0 auto', padding: '1.5rem' }}
-            />
+            <Link href="https://www.activourbano.com.co/" passHref>
+              <Tooltip
+                label="Ir a Activo Urbano"
+                bg="gray.100"
+                color="black"
+                aria-label="Ir a Activo Urbano"
+              >
+                <Image
+                  src="/au_240.png"
+                  alt="Activo Urbano"
+                  style={{
+                    margin: '0 auto',
+                    padding: '1.5rem',
+                    cursor: 'pointer',
+                  }}
+                  role="link"
+                />
+              </Tooltip>
+            </Link>
             <Box p="6">
               <form onSubmit={handleSubmit(onSubmit)}>
                 <FormControl isInvalid={!!errors.id}>
@@ -90,7 +106,7 @@ const Login: NextPageAuth = () => {
                       id="user-id"
                       type="text"
                       color="white"
-                      placeholder="zonaactiva"
+                      placeholder="#########"
                       isInvalid={!!errors.id}
                       {...register('id')}
                     />
