@@ -1,12 +1,21 @@
 import '../styles/globals.css';
-import type { AppProps } from 'next/app';
 import { ChakraProvider } from '@chakra-ui/react';
+import { SessionProvider } from 'next-auth/react';
+import { AppPropsWithAuth } from '@/types/AuthPages';
+import AuthGuard from '@/components/AuthGuard';
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({
+  Component,
+  pageProps: { session, ...pageProps },
+}: AppPropsWithAuth) {
   return (
-    <ChakraProvider>
-      <Component {...pageProps} />
-    </ChakraProvider>
+    <SessionProvider session={session}>
+      <ChakraProvider>
+        <AuthGuard guest={!Component.auth}>
+          <Component {...pageProps} />
+        </AuthGuard>
+      </ChakraProvider>
+    </SessionProvider>
   );
 }
 
