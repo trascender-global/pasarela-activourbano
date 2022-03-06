@@ -18,7 +18,7 @@ import {
 import Head from 'next/head';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import loginSchema from '@schema/login.schema';
+import loginSchema from '@schemas/login.schema';
 import { signIn } from 'next-auth/react';
 import { NextPageAuth } from '@/types/AuthPages';
 import Link from 'next/link';
