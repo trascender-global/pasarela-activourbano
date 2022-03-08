@@ -13,7 +13,6 @@ import {
   InputLeftElement,
   useToast,
   Icon,
-  Tooltip,
 } from '@chakra-ui/react';
 import Head from 'next/head';
 import { useForm } from 'react-hook-form';
@@ -22,9 +21,12 @@ import loginSchema from '@schemas/login.schema';
 import { signIn } from 'next-auth/react';
 import { NextPageAuth } from '@/types/AuthPages';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
 const Login: NextPageAuth = () => {
   const toast = useToast();
+  const router = useRouter();
   const {
     handleSubmit,
     register,
@@ -35,13 +37,8 @@ const Login: NextPageAuth = () => {
     resolver: yupResolver(loginSchema),
   });
 
-  const onSubmit = async (form: any) => {
-    try {
-      signIn('credentials', {
-        id: form.id,
-        callbackUrl: '/',
-      });
-    } catch (error) {
+  useEffect(() => {
+    if (router.query.error) {
       toast({
         title: 'Combinación inválida',
         description:
@@ -50,6 +47,14 @@ const Login: NextPageAuth = () => {
         status: 'error',
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const onSubmit = async (form: any) => {
+    signIn('credentials', {
+      id: form.id,
+      callbackUrl: '/',
+    });
   };
 
   return (
@@ -74,26 +79,21 @@ const Login: NextPageAuth = () => {
             w={['100%', '480px', '720px']}
           >
             <Link href="https://www.activourbano.com.co/" passHref>
-              <Tooltip
-                label="Ir a Activo Urbano"
-                bg="gray.100"
-                color="black"
+              <Image
+                id="au-logo"
+                src="/au_240.png"
                 aria-label="Ir a Activo Urbano"
-              >
-                <Image
-                  src="/au_240.png"
-                  alt="Activo Urbano"
-                  style={{
-                    margin: '0 auto',
-                    padding: '1.5rem',
-                    cursor: 'pointer',
-                  }}
-                  role="link"
-                />
-              </Tooltip>
+                alt="Logo Activo Urbano"
+                style={{
+                  margin: '0 auto',
+                  padding: '1.5rem',
+                  cursor: 'pointer',
+                }}
+                role="link"
+              />
             </Link>
             <Box p="6">
-              <form onSubmit={handleSubmit(onSubmit)}>
+              <form id="login-form" onSubmit={handleSubmit(onSubmit)}>
                 <FormControl isInvalid={!!errors.id}>
                   <FormLabel htmlFor="user-id" color="white">
                     Documento de identidad
@@ -117,7 +117,7 @@ const Login: NextPageAuth = () => {
                   ) : touchedFields.id ? (
                     <FormHelperText color="green.300">
                       <Icon as={BiCheckCircle} />
-                      <span> Tu documento de identidad es válido</span>
+                      <span> Tu documento de identidad es válido.</span>
                     </FormHelperText>
                   ) : (
                     <FormHelperText color="gray.400">
