@@ -1,4 +1,4 @@
-import { Box, Heading, HStack, Show } from '@chakra-ui/react';
+import { Box, Heading, Show, useBreakpointValue } from '@chakra-ui/react';
 import Head from 'next/head';
 import { NextPageAuth } from '@/types/AuthPages';
 import ky from '@lib/ky';
@@ -26,6 +26,7 @@ const headersMobile: TableHeaders = {
 
 const Home: NextPageAuth = () => {
   const session = useSession();
+  const alignItems = useBreakpointValue({ base: 'stretch', md: 'center' });
   const [estadosCuenta, setEstadosCuenta] = useState([] as EstadoCuenta[]);
   const [loading, setLoading] = useState(false);
   const [fetchError, setFetchError] = useState(false);
@@ -43,7 +44,7 @@ const Home: NextPageAuth = () => {
           .json();
 
         const estadosCuenta = res.data;
-        setEstadosCuenta(mockEstadosCuenta(5));
+        setEstadosCuenta(mockEstadosCuenta(25));
         setLoading(false);
       } catch (error) {
         setFetchError(true);
@@ -65,7 +66,7 @@ const Home: NextPageAuth = () => {
         w="full"
         h="full"
         display="flex"
-        alignItems="center"
+        alignItems={alignItems}
         flexDir="column"
       >
         <AuNavbar />
@@ -100,7 +101,6 @@ const Home: NextPageAuth = () => {
                   boxShadow="base"
                   overflow="auto"
                   w={[null, '450px', '750px', '950px', '1240px']}
-                  paddingTop="1em"
                 >
                   <AuTable headers={headers} body={estadosCuenta} />
                 </Box>

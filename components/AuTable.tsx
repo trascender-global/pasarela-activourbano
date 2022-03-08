@@ -21,12 +21,27 @@ const AuTable: React.FC<TableProps> = ({ children, headers, body }) => {
       size="lg"
       style={{ maxWidth: '100%' }}
     >
-      <Thead>
+      <Thead
+        backgroundColor="gray.800"
+        style={{
+          position: 'sticky',
+          top: '0',
+          zIndex: '10',
+        }}
+      >
         <Tr>
-          <Th color="yellow.500">{headers.contrato_cliente}</Th>
-          <Th color="yellow.500">{headers.fechacorte}</Th>
-          <Th color="yellow.500">{headers.valor}</Th>
-          <Th color="yellow.500">{headers.accion}</Th>
+          <Th color="yellow.500" style={{ paddingTop: '2em' }}>
+            {headers.contrato_cliente}
+          </Th>
+          <Th color="yellow.500" style={{ paddingTop: '2em' }}>
+            {headers.fechacorte}
+          </Th>
+          <Th color="yellow.500" style={{ paddingTop: '2em' }}>
+            {headers.valor}
+          </Th>
+          <Th color="yellow.500" style={{ paddingTop: '2em' }}>
+            {headers.accion}
+          </Th>
         </Tr>
       </Thead>
       <Tbody>
