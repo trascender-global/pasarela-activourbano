@@ -62,7 +62,7 @@ const Login: NextPageAuth = () => {
         <Stack
           align="center"
           justify="center"
-          style={{ width: '100%', height: '100%' }}
+          style={{ width: '100%', height: '100%', padding: '0 4px' }}
         >
           <Box
             bg="gray.800"
@@ -71,7 +71,7 @@ const Login: NextPageAuth = () => {
             borderRadius="lg"
             boxShadow="base"
             overflow="hidden"
-            w={['100%', '480px', '640px', '720px']}
+            w={['100%', '480px', '720px']}
           >
             <Link href="https://www.activourbano.com.co/" passHref>
               <Tooltip
@@ -108,6 +108,7 @@ const Login: NextPageAuth = () => {
                       color="white"
                       placeholder="#########"
                       isInvalid={!!errors.id}
+                      rounded="full"
                       {...register('id')}
                     />
                   </InputGroup>
@@ -132,6 +133,7 @@ const Login: NextPageAuth = () => {
                   _hover={{ backgroundColor: 'yellow.600' }}
                   isLoading={isSubmitting}
                   type="submit"
+                  rounded="full"
                 >
                   Iniciar Sesión
                 </Button>

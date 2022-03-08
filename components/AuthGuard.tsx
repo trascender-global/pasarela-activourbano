@@ -1,10 +1,7 @@
 import { Box } from '@chakra-ui/react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
-
-interface AuthProps {
-  guest: boolean;
-}
+import { AuthProps } from '@/types/PropTypes';
 
 const AuthGuard: React.FC<AuthProps> = ({ children, guest }) => {
   const { data: session, status } = useSession();

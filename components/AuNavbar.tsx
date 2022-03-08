@@ -2,7 +2,7 @@ import { Box, Button, Icon } from '@chakra-ui/react';
 import { signOut } from 'next-auth/react';
 import { BiLogOutCircle } from 'react-icons/bi';
 
-const Navbar: React.FC = ({ children }) => {
+const AuNavbar: React.FC = ({ children }) => {
   return (
     <Box
       bg="gray.800"
@@ -16,11 +16,20 @@ const Navbar: React.FC = ({ children }) => {
         <Button
           onClick={() => signOut()}
           colorScheme="yellow"
+          _hover={{ backgroundColor: 'yellow.100' }}
+          variant="outline"
           style={{
             alignItems: 'center',
           }}
+          rounded="full"
         >
-          <Icon as={BiLogOutCircle} w={5} h={5} marginRight={2} />
+          <Icon
+            as={BiLogOutCircle}
+            w={5}
+            h={5}
+            marginRight={2}
+            marginTop={0.5}
+          />
           <span>Cerrar Sesión</span>
         </Button>
       </Box>
@@ -28,4 +37,4 @@ const Navbar: React.FC = ({ children }) => {
   );
 };
 
-export default Navbar;
+export default AuNavbar;

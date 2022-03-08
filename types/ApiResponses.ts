@@ -17,6 +17,7 @@ export type EstadosCuentaDetalladoResponse = {
 }
 
 export type EstadoCuenta = {
+    [index: string]: string | number,
     referencia: string,
     fechacorte: string,
     contrato_cliente: string,

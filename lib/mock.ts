@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker'
 import { EstadoCuenta, EstadoCuentaDetallado } from '@/types/ApiResponses'
-import { localeCurrency } from '@lib/format'
+import { formatCurrency } from '@lib/format'
 
 export function mockEstadosCuenta(n = 5): EstadoCuenta[] {
     const estadosCuenta: EstadoCuenta[] = Array(n)
@@ -12,7 +12,7 @@ export function mockEstadosCuenta(n = 5): EstadoCuenta[] {
         const direccion_cliente = faker.address.streetAddress(true)
         const valor = faker.datatype.float({ min: 900000.0, precision: 2 })
         const nro_id_cliente = faker.unique(faker.datatype.number, [{ max: 199999999 }]).toString()
-        const valorTexto = localeCurrency(valor)
+        const valorTexto = formatCurrency(valor)
         const fechacorte_texto = new Date(fechacorte).toLocaleDateString('es-419', { year: 'numeric', month: 'long', day: 'numeric' })
 
         const estadoCuenta: EstadoCuenta = {

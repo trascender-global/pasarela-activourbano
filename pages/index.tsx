@@ -1,11 +1,28 @@
-import { Box } from '@chakra-ui/react';
+import { Box, Heading, HStack, Show } from '@chakra-ui/react';
 import Head from 'next/head';
 import { NextPageAuth } from '@/types/AuthPages';
 import ky from '@lib/ky';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import { EstadosCuentaResponse, EstadoCuenta } from '@/types/ApiResponses';
-import Navbar from '@/components/Navbar';
+import AuNavbar from '@/components/AuNavbar';
+import AuTable from '@/components/AuTable';
+import { mockEstadosCuenta } from '@/lib/mock';
+import { TableHeaders } from '@/types/PropTypes';
+import AuMobileEC from '@/components/AuMobileEC';
+
+const headers: TableHeaders = {
+  contrato_cliente: 'No. Contrato',
+  fechacorte: 'Fecha de corte',
+  valor: 'Valor',
+  accion: 'Acción',
+};
+
+const headersMobile: TableHeaders = {
+  contrato_cliente: 'No. Contrato',
+  fechacorte: 'Fecha de corte',
+  valor: 'Valor',
+};
 
 const Home: NextPageAuth = () => {
   const session = useSession();
@@ -26,7 +43,7 @@ const Home: NextPageAuth = () => {
           .json();
 
         const estadosCuenta = res.data;
-        setEstadosCuenta(estadosCuenta);
+        setEstadosCuenta(mockEstadosCuenta(5));
         setLoading(false);
       } catch (error) {
         setFetchError(true);
@@ -45,18 +62,22 @@ const Home: NextPageAuth = () => {
       </Head>
       <Box
         bg="gray.700"
-        width="full"
-        height="full"
+        w="full"
+        h="full"
         display="flex"
+        alignItems="center"
         flexDir="column"
       >
-        <Navbar />
+        <AuNavbar />
         <Box
-          padding={8}
+          paddingY={8}
+          paddingX={[2, 2, 2, 4]}
           color="white"
           display="flex"
           flexGrow={1}
-          justifyContent={loading || fetchError ? 'center' : 'flex-start'}
+          overflow="auto"
+          flexDir={loading || fetchError ? 'row' : 'column'}
+          justifyContent={loading || fetchError ? 'center' : 'start'}
           alignItems={loading || fetchError ? 'center' : 'start'}
         >
           {loading ? (
@@ -64,7 +85,37 @@ const Home: NextPageAuth = () => {
           ) : fetchError ? (
             <Box>Hubo un error</Box>
           ) : (
-            <Box>Estados de cuenta: {estadosCuenta.length}</Box>
+            <>
+              <Box display="flex" flexWrap="wrap">
+                <Heading size="md" style={{ padding: '0 0 0.5em 0' }}>
+                  Estados de Cuenta
+                </Heading>
+              </Box>
+              <Show above="md">
+                <Box
+                  bg="gray.800"
+                  borderTopColor="yellow.600"
+                  borderTopWidth="5px"
+                  borderRadius="lg"
+                  boxShadow="base"
+                  overflow="auto"
+                  w={[null, '450px', '750px', '950px', '1240px']}
+                  paddingTop="1em"
+                >
+                  <AuTable headers={headers} body={estadosCuenta} />
+                </Box>
+              </Show>
+              <Show below="md">
+                {estadosCuenta.map((ec, i) => (
+                  <AuMobileEC
+                    key={`ec-${i}`}
+                    headers={headersMobile}
+                    estadoCuenta={ec}
+                    style={{ marginBottom: '0.5em' }}
+                  />
+                ))}
+              </Show>
+            </>
           )}
         </Box>
       </Box>
