@@ -7,13 +7,15 @@ import {
   Th,
   Button,
   Icon,
+  Box,
 } from '@chakra-ui/react';
 import { TableProps } from '@/types/PropTypes';
 import { EstadoCuenta } from '@/types/ApiResponses';
 import { formatCurrency, formatDate } from '@/lib/format';
-import { BiDollar } from 'react-icons/bi';
+import { BiDollar, BiListOl } from 'react-icons/bi';
+import Link from 'next/link';
 
-const AuTable: React.FC<TableProps> = ({ children, headers, body }) => {
+const AuTable: React.FC<TableProps> = ({ headers, body }) => {
   return (
     <Table
       variant="striped"
@@ -51,10 +53,21 @@ const AuTable: React.FC<TableProps> = ({ children, headers, body }) => {
             <Td>{formatDate(item.fechacorte)}</Td>
             <Td>{formatCurrency(item.valor)}</Td>
             <Td>
-              <Button colorScheme="green" rounded="full">
-                <Icon as={BiDollar} marginRight={1} marginTop={0.5} />
-                <span>Pagar</span>
-              </Button>
+              <Box display="inline-flex" justifyContent="start" gap="0.5em">
+                <Button colorScheme="green" rounded="full">
+                  <Icon as={BiDollar} marginRight={1} marginTop={0.5} />
+                  <span>Pagar</span>
+                </Button>
+                <Link
+                  href={`estado-cuenta/detalles?ref=${item.referencia}`}
+                  passHref
+                >
+                  <Button colorScheme="blackAlpha" rounded="full">
+                    <Icon as={BiListOl} marginRight={1} marginTop={0.5} />
+                    <span>Detalles</span>
+                  </Button>
+                </Link>
+              </Box>
             </Td>
           </Tr>
         ))}

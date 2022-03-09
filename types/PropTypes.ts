@@ -21,6 +21,8 @@ export type TableHeaders = {
 export type TableProps = {
     headers: TableHeaders,
     body: EstadoCuenta[],
+    filter: string,
+    orderBy: string,
     style?: CSSProperties
 }
 

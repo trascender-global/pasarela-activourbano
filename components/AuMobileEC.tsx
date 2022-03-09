@@ -4,7 +4,6 @@ import { Box, Button, Heading, Icon } from '@chakra-ui/react';
 import { BiDollar } from 'react-icons/bi';
 
 const AuMobileEC: React.FC<MobileECProps> = ({
-  children,
   estadoCuenta,
   headers,
   style,
