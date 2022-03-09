@@ -1,8 +1,9 @@
 import { Box, Button, Icon } from '@chakra-ui/react';
 import { signOut } from 'next-auth/react';
+import { FC } from 'react';
 import { BiLogOutCircle } from 'react-icons/bi';
 
-const AuNavbar: React.FC = ({ children }) => {
+const AuNavbar: FC = ({ children }) => {
   return (
     <Box
       bg="gray.800"

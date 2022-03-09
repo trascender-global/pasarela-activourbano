@@ -1,5 +1,5 @@
 import { CSSProperties } from "react"
-import { EstadoCuenta } from "./ApiResponses"
+import { EstadoCuenta, EstadoCuentaDetallado } from "./ApiResponses"
 
 export type AuthProps = {
     guest: boolean
@@ -29,5 +29,29 @@ export type TableProps = {
 export type MobileECProps = {
     headers: TableHeaders,
     estadoCuenta: EstadoCuenta,
+    style?: CSSProperties
+}
+
+export type DetailHeaders = {
+    [index: string]: string | undefined,
+    referencia: string,
+    fechaCorte: string,
+    fechaVencimiento: string,
+    fechaVencimiento_Recargo: string,
+    nro_id_Cliente?: string,
+    nombre_Cliente?: string,
+    contrato_Cliente?: string,
+    direccion_Cliente?: string,
+    municipio_Cliente?: string,
+    // ? En el API está escrito así 
+    urbanizacion_Clente?: string,
+    periodo_Canon: string,
+    valor_sin_Recargo: string,
+    valor_Con_Recargo: string,
+}
+
+export type AuDetailECProps = {
+    headers: DetailHeaders,
+    estadoCuenta: EstadoCuentaDetallado,
     style?: CSSProperties
 }

@@ -135,7 +135,7 @@ const Home: NextPageAuth = () => {
           <>
             <Box
               display="flex"
-              width="full"
+              w="full"
               justifyContent="space-between"
               alignItems="center"
               flexWrap="wrap"

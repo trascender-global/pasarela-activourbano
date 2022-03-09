@@ -14,8 +14,9 @@ import { EstadoCuenta } from '@/types/ApiResponses';
 import { formatCurrency, formatDate } from '@/lib/format';
 import { BiDollar, BiListOl } from 'react-icons/bi';
 import Link from 'next/link';
+import { FC } from 'react';
 
-const AuTable: React.FC<TableProps> = ({ headers, body }) => {
+const AuTable: FC<TableProps> = ({ headers, body }) => {
   return (
     <Table
       variant="striped"

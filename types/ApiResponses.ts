@@ -29,6 +29,7 @@ export type EstadoCuenta = {
 }
 
 export type EstadoCuentaDetallado = {
+    [index: string]: string | number | Detalle[],
     ean13: string,
     referencia: string,
     valor: string,

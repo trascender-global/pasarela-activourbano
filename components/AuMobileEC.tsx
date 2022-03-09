@@ -1,13 +1,11 @@
 import { formatCurrency, formatDate } from '@/lib/format';
 import { MobileECProps } from '@/types/PropTypes';
-import { Box, Button, Heading, Icon } from '@chakra-ui/react';
-import { BiDollar } from 'react-icons/bi';
+import { Box, Button, Heading, Icon, VStack } from '@chakra-ui/react';
+import Link from 'next/link';
+import { FC } from 'react';
+import { BiDollar, BiListOl } from 'react-icons/bi';
 
-const AuMobileEC: React.FC<MobileECProps> = ({
-  estadoCuenta,
-  headers,
-  style,
-}) => {
+const AuMobileEC: FC<MobileECProps> = ({ estadoCuenta, headers, style }) => {
   return (
     <Box
       bg="gray.800"
@@ -35,12 +33,21 @@ const AuMobileEC: React.FC<MobileECProps> = ({
           </Box>
         ))}
       </Box>
-      <Box paddingX="1em" paddingTop="1em">
+      <VStack paddingX="1em" paddingTop="1em">
         <Button colorScheme="green" rounded="full" isFullWidth>
           <Icon as={BiDollar} marginRight={1} marginTop={0.5} />
           <span>Pagar</span>
         </Button>
-      </Box>
+        <Link
+          href={`estado-cuenta/detalles?ref=${estadoCuenta.referencia}`}
+          passHref
+        >
+          <Button colorScheme="blackAlpha" rounded="full" isFullWidth>
+            <Icon as={BiListOl} marginRight={1} marginTop={0.5} />
+            <span>Detalles</span>
+          </Button>
+        </Link>
+      </VStack>
     </Box>
   );
 };
