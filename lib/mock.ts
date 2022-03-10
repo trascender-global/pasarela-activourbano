@@ -88,7 +88,7 @@ export function mockDetalladoEstadoCuenta(referencia: string): EstadoCuentaDetal
 }
 
 export function mockDetalle(referencia: string): Detalle {
-    const valor_Mes = faker.datatype.float({ min: 900000, max: 10000000, precision: 2 })
+    const valor_Mes = faker.datatype.float({ min: 900000, max: 1000000, precision: 2 })
     const detalle: Detalle = {
         referencia,
         codConcepto: faker.random.alphaNumeric(3, { bannedChars: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('') }),

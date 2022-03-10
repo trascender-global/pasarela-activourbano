@@ -66,7 +66,47 @@ export type TableDetailHeaders = {
     total: string,
 }
 
+export type WompiShippingAddress = {
+    addressLine1: string,
+    addressLine2?: string,
+    country: string,
+    city: string,
+    phoneNumber: string,
+    region: string,
+    name?: string,
+    postalCode?: string
+}
+
+export type WompiCustomerData = {
+    email?: string,
+    fullName?: string,
+    phoneNumber?: string,
+    phoneNumberPrefix?: string,
+    legalId: string,
+    legalIdType: 'CC' | 'CE' | 'NIT' | 'PP' | 'TI' | 'DNI' | 'RG' | 'OTHER',
+}
+
+export type WompiTax = {
+    vat?: number,
+    consumption?: number
+}
+
+export type WompiOptions = {
+    publicKey: string,
+    currency: string,
+    amountInCents: number,
+    reference: string,
+    signatureIntegrity?: string,
+    redirectUrl?: string,
+    shippingAddress?: WompiShippingAddress,
+    collectShipping?: boolean,
+    customerData?: WompiCustomerData,
+    collectCustomerLegalId?: boolean,
+    taxInCents?: WompiTax
+}
+
 export type AuDetailTableECProps = {
     headers: TableDetailHeaders,
-    data: Detalle[]
+    data: Detalle[],
+    referencia: string,
 }

@@ -12,7 +12,6 @@ import {
   Icon,
   IconButton,
   Show,
-  useBreakpoint,
   useBreakpointValue,
 } from '@chakra-ui/react';
 import { NextPage } from 'next';
@@ -118,12 +117,7 @@ const Detalles: NextPageAuth = () => {
             </Link>
           </Show>
         </Box>
-        <Box
-          display="flex"
-          flexWrap="wrap-reverse"
-          justifyContent="space-evenly"
-          gap="1em"
-        >
+        <Box margin="0 auto" gap="1em">
           <Box paddingTop="2em" flexGrow={1}>
             <AuDetailEC headers={headers} estadoCuenta={estadoCuenta} />
           </Box>
@@ -140,6 +134,7 @@ const Detalles: NextPageAuth = () => {
               <AuDetailTableEC
                 headers={detailHeaders}
                 data={estadoCuenta.listaDetalles}
+                referencia={ref as string}
               />
             </Box>
           </Box>
