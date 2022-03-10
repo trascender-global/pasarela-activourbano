@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker'
-import { EstadoCuenta, EstadoCuentaDetallado } from '@/types/ApiResponses'
-import { formatCurrency } from '@lib/format'
+import { Detalle, EstadoCuenta, EstadoCuentaDetallado } from '@/types/ApiResponses'
+import { formatCurrency, formatDate } from '@lib/format'
 
 export function mockEstadosCuenta(n = 5): EstadoCuenta[] {
     const estadosCuenta: EstadoCuenta[] = Array(n)
@@ -10,7 +10,7 @@ export function mockEstadosCuenta(n = 5): EstadoCuenta[] {
         const fechacorte = faker.date.soon(30).toJSON()
         const contrato_cliente = faker.datatype.number({ min: 1000, max: 9999 }).toString()
         const direccion_cliente = faker.address.streetAddress(true)
-        const valor = faker.datatype.float({ min: 900000.0, precision: 2 })
+        const valor = faker.datatype.float({ min: 900000.0, max: 10000000, precision: 2 })
         const nro_id_cliente = faker.unique(faker.datatype.number, [{ max: 199999999 }]).toString()
         const valorTexto = formatCurrency(valor)
         const fechacorte_texto = new Date(fechacorte).toLocaleDateString('es-419', { year: 'numeric', month: 'long', day: 'numeric' })
@@ -31,9 +31,11 @@ export function mockEstadosCuenta(n = 5): EstadoCuenta[] {
     return estadosCuenta
 }
 export function mockDetalladoEstadoCuenta(referencia: string): EstadoCuentaDetallado {
+    const valor_sin_Recargo = faker.datatype.number({ min: 929000, max: 19999999 })
+    const valor_Con_Recargo = faker.datatype.number({ min: valor_sin_Recargo, max: 19999999 })
     const estadoCuenta: EstadoCuentaDetallado = {
         ean13: faker.random.alphaNumeric(13, { bannedChars: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('') }),
-        referencia: faker.random.alphaNumeric(15, { bannedChars: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('') }),
+        referencia,
         valor: '',
         fecha: new Date().toJSON(),
         fechaCorte: faker.date.soon(10).toJSON(),
@@ -55,7 +57,7 @@ export function mockDetalladoEstadoCuenta(referencia: string): EstadoCuentaDetal
         municipio_Cliente: faker.address.cityName(),
         urbanizacion_Clente: faker.address.county(),
         pagar_En: 'Bancolombia',
-        periodo_Canon: faker.date.betweens(faker.date.soon(10).toJSON(), faker.date.soon(30).toJSON(), 2).join(' - '),
+        periodo_Canon: faker.date.betweens(faker.date.soon(10).toJSON(), faker.date.soon(30).toJSON(), 2).map((d) => formatDate(d)).join(' - '),
         texto_Fecha_Sin_Recargo: '',
         texto_Fecha_Con_Recargo: '',
         texto_Fecha_Con_Recargo_2: '',
@@ -69,9 +71,9 @@ export function mockDetalladoEstadoCuenta(referencia: string): EstadoCuentaDetal
         fecha_Con_Recargo_2Texto: '',
         fecha_Con_Recargo_3: '',
         fecha_Con_Recargo_3Texto: '',
-        valor_sin_Recargo: faker.unique(faker.datatype.number, [{ max: 199999999 }]),
+        valor_sin_Recargo,
         valor_sin_RecargoTexto: '',
-        valor_Con_Recargo: faker.unique(faker.datatype.number, [{ max: 199999999 }]),
+        valor_Con_Recargo,
         valor_Con_RecargoTexto: '',
         valor_Con_Recargo_2: 0,
         valor_Con_Recargo_2Texto: '',
@@ -79,8 +81,36 @@ export function mockDetalladoEstadoCuenta(referencia: string): EstadoCuentaDetal
         valor_Con_Recargo_3Texto: '',
         municipio_d: '',
         municipioyurb: '',
-        listaDetalles: []
+        listaDetalles: mockDetalles(referencia)
     }
 
     return estadoCuenta
+}
+
+export function mockDetalle(referencia: string): Detalle {
+    const valor_Mes = faker.datatype.float({ min: 900000, max: 10000000, precision: 2 })
+    const detalle: Detalle = {
+        referencia,
+        codConcepto: faker.random.alphaNumeric(3, { bannedChars: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('') }),
+        nombre_Concepto: faker.company.bsNoun(),
+        valores_Vencidos: 0,
+        valor_Mes,
+        nrodocumento: 0,
+        codTipoCartera: 'COD',
+        fechaDcto: faker.date.soon(30).toJSON(),
+        total: valor_Mes,
+        valores_VencidosTexto: '',
+        valor_MesTexto: formatCurrency(valor_Mes),
+        totalTexto: formatCurrency(valor_Mes)
+    }
+
+    return detalle
+}
+
+export function mockDetalles(referencia: string, n = 3): Detalle[] {
+    const detalles: Detalle[] = Array(n)
+    for (let i = 0; i < n; i++) {
+        detalles[i] = mockDetalle(referencia)
+    }
+    return detalles
 }

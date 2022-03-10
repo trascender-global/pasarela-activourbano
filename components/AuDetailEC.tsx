@@ -1,6 +1,6 @@
 import { formatCurrency, formatDate } from '@/lib/format';
 import { AuDetailECProps } from '@/types/PropTypes';
-import { Box, Heading } from '@chakra-ui/react';
+import { Box, Divider, Heading } from '@chakra-ui/react';
 import { FC } from 'react';
 
 const AuDetailEC: FC<AuDetailECProps> = ({ headers, estadoCuenta, style }) => {
@@ -12,23 +12,53 @@ const AuDetailEC: FC<AuDetailECProps> = ({ headers, estadoCuenta, style }) => {
       borderRadius="lg"
       boxShadow="base"
       overflow="auto"
+      padding="1.5em"
       w="full"
       style={style}
     >
-      {Object.keys(headers).map((key, i) => (
-        <Box key={`header-${i}`} paddingX="1em">
-          <Heading color="yellow.500" size="xs">
-            {headers[key]?.toUpperCase()}
+      <Box display="flex" flexWrap="wrap" justifyContent="flex-start">
+        <Box paddingX="1em" paddingY="0.25em" w="50%">
+          <Heading color="yellow.500" size="sm">
+            FECHA DE PAGO SIN RECARGO
           </Heading>
-          <span>
-            {key === 'fechaCorte'
-              ? formatDate(estadoCuenta[key])
-              : key === 'valor'
-              ? formatCurrency(estadoCuenta[key])
-              : estadoCuenta[key]}
-          </span>
+          <span>{formatDate(estadoCuenta.fechaVencimiento)}</span>
         </Box>
-      ))}
+        <Box paddingX="1em" paddingY="0.25em" w="50%">
+          <Heading color="yellow.500" size="sm">
+            VALOR SIN RECARGO
+          </Heading>
+          <span>{formatCurrency(estadoCuenta.valor_sin_Recargo)}</span>
+        </Box>
+      </Box>
+      <Box display="flex" flexWrap="wrap" justifyContent="flex-start">
+        <Box paddingX="1em" paddingY="0.25em" w="50%">
+          <Heading color="yellow.500" size="sm">
+            FECHA DE PAGO CON RECARGO
+          </Heading>
+          <span>{formatDate(estadoCuenta.fechaVencimiento)}</span>
+        </Box>
+        <Box paddingX="1em" paddingY="0.25em" w="50%">
+          <Heading color="yellow.500" size="sm">
+            VALOR CON RECARGO
+          </Heading>
+          <span>{formatCurrency(estadoCuenta.valor_sin_Recargo)}</span>
+        </Box>
+      </Box>
+      <Divider style={{ margin: '1em 0' }} />
+      <Box display="flex" flexWrap="wrap" justifyContent="flex-start">
+        {Object.keys(headers).map((key, i) => (
+          <Box key={`header-${i}`} paddingX="1em" paddingY="0.25em" w="50%">
+            <Heading color="yellow.500" size="xs">
+              {headers[key]?.toUpperCase()}
+            </Heading>
+            <span>
+              {key === 'fechaCorte'
+                ? formatDate(estadoCuenta[key])
+                : estadoCuenta[key]}
+            </span>
+          </Box>
+        ))}
+      </Box>
     </Box>
   );
 };

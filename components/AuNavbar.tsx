@@ -6,15 +6,19 @@ import { BiLogOutCircle } from 'react-icons/bi';
 const AuNavbar: FC = ({ children }) => {
   return (
     <Box
+      id="navbar"
       bg="gray.800"
       width="full"
       display="relative"
       zIndex={10}
       paddingX={8}
       paddingY={6}
+      role="navigation"
     >
       <Box display="flex" justifyContent="flex-end">
         <Button
+          id="logout-btn"
+          aria-label="Cerrar sesión"
           onClick={() => signOut()}
           colorScheme="yellow"
           _hover={{ backgroundColor: 'yellow.100' }}

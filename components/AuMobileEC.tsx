@@ -33,21 +33,17 @@ const AuMobileEC: FC<MobileECProps> = ({ estadoCuenta, headers, style }) => {
           </Box>
         ))}
       </Box>
-      <VStack paddingX="1em" paddingTop="1em">
-        <Button colorScheme="green" rounded="full" isFullWidth>
-          <Icon as={BiDollar} marginRight={1} marginTop={0.5} />
-          <span>Pagar</span>
-        </Button>
+      <Box paddingX="1em" paddingTop="1em">
         <Link
           href={`estado-cuenta/detalles?ref=${estadoCuenta.referencia}`}
           passHref
         >
-          <Button colorScheme="blackAlpha" rounded="full" isFullWidth>
-            <Icon as={BiListOl} marginRight={1} marginTop={0.5} />
-            <span>Detalles</span>
+          <Button colorScheme="green" rounded="full" isFullWidth>
+            <Icon as={BiDollar} marginRight={1} marginTop={0.5} />
+            <span>Pagar</span>
           </Button>
         </Link>
-      </VStack>
+      </Box>
     </Box>
   );
 };

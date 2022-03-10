@@ -1,17 +1,19 @@
 import AuDetailEC from '@/components/AuDetailEC';
+import AuDetailTableEC from '@/components/AuDetailTableEC';
 import DefaultLayout from '@/layouts/default';
 import { mockDetalladoEstadoCuenta } from '@/lib/mock';
 import { EstadoCuentaDetallado } from '@/types/ApiResponses';
 import { NextPageAuth } from '@/types/AuthPages';
-import { DetailHeaders } from '@/types/PropTypes';
+import { DetailHeaders, TableDetailHeaders } from '@/types/PropTypes';
 import {
   Box,
   Button,
   Heading,
-  HStack,
   Icon,
   IconButton,
   Show,
+  useBreakpoint,
+  useBreakpointValue,
 } from '@chakra-ui/react';
 import { NextPage } from 'next';
 import Head from 'next/head';
@@ -23,17 +25,23 @@ import { BiArrowBack } from 'react-icons/bi';
 const headers: DetailHeaders = {
   referencia: 'Referencia',
   fechaCorte: 'Fecha de corte',
-  fechaVencimiento: 'Fecha de vencimiento',
-  fechaVencimiento_Recargo: 'Fecha de vencimiento con recargo',
   urbanizacion_Clente: 'Urbanización',
   periodo_Canon: 'Periodo canon',
-  valor_sin_Recargo: 'Valor sin recargo',
-  valor_Con_Recargo: 'Valor con recargo',
+};
+
+const detailHeaders: TableDetailHeaders = {
+  nombre_Concepto: 'CONCEPTO',
+  fechaDcto: 'FECHA DE DESCUENTO',
+  total: 'TOTAL',
 };
 
 const Detalles: NextPageAuth = () => {
   const router = useRouter();
   const ref = router.query?.ref;
+  const justifyContent = useBreakpointValue({
+    base: 'space-between',
+    md: 'space-evenly',
+  });
 
   const estadoCuenta: EstadoCuentaDetallado = mockDetalladoEstadoCuenta(
     ref as string
@@ -54,7 +62,7 @@ const Detalles: NextPageAuth = () => {
       </Head>
       <Box
         paddingY={8}
-        paddingX={[2, 4, 4, 8]}
+        paddingX={[2, 4, 4, 8, 16]}
         color="white"
         display="flex"
         flexGrow={1}
@@ -66,8 +74,9 @@ const Detalles: NextPageAuth = () => {
         <Box
           display="flex"
           flexWrap="wrap"
-          justifyContent="space-evenly"
+          justifyContent={justifyContent}
           alignItems="center"
+          paddingX="0.25em"
           gap="0.5em"
         >
           <Heading
@@ -109,10 +118,32 @@ const Detalles: NextPageAuth = () => {
             </Link>
           </Show>
         </Box>
-        <HStack wrap="wrap" paddingTop="2em">
-          <AuDetailEC headers={headers} estadoCuenta={estadoCuenta} />
-          <Box></Box>
-        </HStack>
+        <Box
+          display="flex"
+          flexWrap="wrap-reverse"
+          justifyContent="space-evenly"
+          gap="1em"
+        >
+          <Box paddingTop="2em" flexGrow={1}>
+            <AuDetailEC headers={headers} estadoCuenta={estadoCuenta} />
+          </Box>
+          <Box paddingTop="2em" flexGrow={1} overflowX="hidden">
+            <Box
+              bg="gray.800"
+              borderTopColor="yellow.600"
+              borderTopWidth="5px"
+              borderRadius="lg"
+              boxShadow="base"
+              overflow="auto"
+              w="full"
+            >
+              <AuDetailTableEC
+                headers={detailHeaders}
+                data={estadoCuenta.listaDetalles}
+              />
+            </Box>
+          </Box>
+        </Box>
       </Box>
     </>
   );
