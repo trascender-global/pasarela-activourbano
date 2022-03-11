@@ -117,11 +117,11 @@ const Detalles: NextPageAuth = () => {
             </Link>
           </Show>
         </Box>
-        <Box margin="0 auto" gap="1em">
-          <Box paddingTop="2em" flexGrow={1}>
+        <Box display="flex" flexDir="column" alignItems="center" gap="1em">
+          <Box paddingTop="2em" flexGrow={1} maxW="full">
             <AuDetailEC headers={headers} estadoCuenta={estadoCuenta} />
           </Box>
-          <Box paddingTop="2em" flexGrow={1} overflowX="hidden">
+          <Box paddingTop="2em" flexGrow={1} maxW="full">
             <Box
               bg="gray.800"
               borderTopColor="yellow.600"

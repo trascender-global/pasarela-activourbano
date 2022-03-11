@@ -4,6 +4,7 @@ import {
   Button,
   Checkbox,
   Icon,
+  Show,
   Table,
   Tbody,
   Td,
@@ -12,7 +13,8 @@ import {
   Thead,
   Tr,
 } from '@chakra-ui/react';
-import { FC, useEffect, useMemo, useState } from 'react';
+import ky from 'ky';
+import { FC, useEffect, useState } from 'react';
 import { BiCheckShield } from 'react-icons/bi';
 
 const AuDetailTableEC: FC<AuDetailTableECProps> = ({
@@ -37,19 +39,44 @@ const AuDetailTableEC: FC<AuDetailTableECProps> = ({
   }, [checkedDetails, data]);
 
   const [wompi, setWompi] = useState<WompiOptions>({
-    publicKey: process.env.WOMPI_PUBLICKEY || '',
+    publicKey: process.env.NEXT_PUBLIC_WOMPI_PUBLIC_KEY || '',
     currency: 'COP',
     amountInCents: total * 100,
     reference: referencia,
+    redirectUrl: process.env.NEXT_PUBLIC_APP_URL + '/pago/redirect',
   });
+
   useEffect(() => {
-    setWompi({
-      publicKey: process.env.WOMPI_PUBLICKEY || '',
-      currency: 'COP',
-      amountInCents: total * 100,
-      reference: referencia,
-    });
-  }, [total, referencia]);
+    const handleEffect = async () => {
+      try {
+        const res: any = await ky
+          .post(process.env.NEXT_PUBLIC_APP_URL + '/api/wompi/integrity', {
+            json: {
+              referencia,
+              monto: (total * 100).toString(),
+              moneda: 'COP',
+            },
+          })
+          .json();
+
+        const signatureIntegrity = res.signatureIntegrity;
+
+        setWompi({
+          ...wompi,
+          amountInCents: total * 100,
+          signatureIntegrity,
+        });
+      } catch (error) {
+        setWompi({
+          ...wompi,
+          amountInCents: total * 100,
+          redirectUrl: process.env.NEXT_PUBLIC_APP_URL + '/pago/redirect',
+        });
+      }
+    };
+    handleEffect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [total]);
 
   // https://docs.wompi.co/docs/en/widget-checkout-web#paso-6-escoge-un-m%C3%A9todo-de-integraci%C3%B3n
   // https://docs.wompi.co/docs/en/widget-checkout-web#bot%C3%B3n-personalizado-opcional
@@ -110,10 +137,15 @@ const AuDetailTableEC: FC<AuDetailTableECProps> = ({
       </Tbody>
       <Tfoot>
         <Tr>
-          <Th colSpan={3}>
+          <Th colSpan={3} style={{ textAlign: 'center' }}>
+            <Show below="md">
+              <span style={{ display: 'inline-block', padding: '0.25em 0' }}>
+                {formatCurrency(total)}
+              </span>
+            </Show>
             <form action="https://checkout.wompi.co/p/" method="GET">
               <input type="hidden" name="public-key" value={wompi.publicKey} />
-              <input type="hidden" name="currency" value="MONEDA" />
+              <input type="hidden" name="currency" value={wompi.currency} />
               <input
                 type="hidden"
                 name="amount-in-cents"
@@ -277,7 +309,9 @@ const AuDetailTableEC: FC<AuDetailTableECProps> = ({
             </form>
           </Th>
           <Th isNumeric>
-            <span>{formatCurrency(total)}</span>
+            <Show above="md">
+              <span>{formatCurrency(total)}</span>
+            </Show>
           </Th>
         </Tr>
       </Tfoot>
