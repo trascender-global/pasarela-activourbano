@@ -94,3 +94,15 @@ export type Detalle = {
     valor_MesTexto: string,
     totalTexto: string
 }
+
+export type WompiEventResponse = {
+    event: string,
+    data: any,
+    environment: string,
+    signature: {
+        properties: any,
+        checksum: string,
+    },
+    timestamp: number,
+    sent_at: string
+}
