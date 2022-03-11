@@ -29,6 +29,7 @@ const AuDetailTableEC: FC<AuDetailTableECProps> = ({
   const isChecked = checkedDetails.every(Boolean);
   const isIndeterminate = checkedDetails.some(Boolean) && !isChecked;
   const [total, setTotal] = useState(0);
+  const [updatingTotal, setUpdatingTotal] = useState(false);
   useEffect(() => {
     setTotal(
       data.reduce((a, b, i) => {
@@ -49,6 +50,7 @@ const AuDetailTableEC: FC<AuDetailTableECProps> = ({
   useEffect(() => {
     const handleEffect = async () => {
       try {
+        setUpdatingTotal(true);
         const res: any = await ky
           .post(process.env.NEXT_PUBLIC_APP_URL + '/api/wompi/integrity', {
             json: {
@@ -66,12 +68,14 @@ const AuDetailTableEC: FC<AuDetailTableECProps> = ({
           amountInCents: total * 100,
           signatureIntegrity,
         });
+        setUpdatingTotal(false);
       } catch (error) {
         setWompi({
           ...wompi,
           amountInCents: total * 100,
           redirectUrl: process.env.NEXT_PUBLIC_APP_URL + '/pago/redirect',
         });
+        setUpdatingTotal(false);
       }
     };
     handleEffect();
@@ -301,7 +305,8 @@ const AuDetailTableEC: FC<AuDetailTableECProps> = ({
                 rounded="full"
                 isFullWidth
                 type="submit"
-                disabled={!isChecked && !isIndeterminate}
+                isLoading={updatingTotal}
+                disabled={(!isChecked && !isIndeterminate) || updatingTotal}
               >
                 <Icon as={BiCheckShield} marginRight={1} marginTop={0.5} />
                 <span>Pagar con Wompi</span>
