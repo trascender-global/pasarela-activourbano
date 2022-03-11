@@ -14,6 +14,7 @@ import {
   Tr,
 } from '@chakra-ui/react';
 import ky from 'ky';
+import { useSession } from 'next-auth/react';
 import { FC, useEffect, useState } from 'react';
 import { BiCheckShield } from 'react-icons/bi';
 
@@ -22,14 +23,19 @@ const AuDetailTableEC: FC<AuDetailTableECProps> = ({
   data,
   referencia,
 }) => {
+  const session = useSession();
+  console.log(session);
+
   const [checkedDetails, setCheckedDetails] = useState(
     Array<boolean>(data.length).fill(false)
   );
 
   const isChecked = checkedDetails.every(Boolean);
   const isIndeterminate = checkedDetails.some(Boolean) && !isChecked;
+
   const [total, setTotal] = useState(0);
   const [updatingTotal, setUpdatingTotal] = useState(false);
+
   useEffect(() => {
     setTotal(
       data.reduce((a, b, i) => {
@@ -45,6 +51,10 @@ const AuDetailTableEC: FC<AuDetailTableECProps> = ({
     amountInCents: total * 100,
     reference: referencia,
     redirectUrl: process.env.NEXT_PUBLIC_APP_URL + '/pago/redirect',
+    customerData: {
+      legalIdType: 'CC',
+      legalId: session.data?.id as string,
+    },
   });
 
   useEffect(() => {

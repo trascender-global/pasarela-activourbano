@@ -1,5 +1,5 @@
 import { CSSProperties } from "react"
-import { Detalle, EstadoCuenta, EstadoCuentaDetallado } from "./ApiResponses"
+import { Detalle, EstadoCuenta, EstadoCuentaDetallado, WompiTransaction } from "./ApiResponses"
 
 export type AuthProps = {
     guest: boolean
@@ -109,4 +109,8 @@ export type AuDetailTableECProps = {
     headers: TableDetailHeaders,
     data: Detalle[],
     referencia: string,
+}
+
+export type RedirectPageProps = {
+    transaction: WompiTransaction
 }

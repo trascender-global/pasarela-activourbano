@@ -1,3 +1,5 @@
+import { WompiCustomerData } from "./PropTypes"
+
 export type AuthResponse = {
     exito: boolean,
     mensaje: string,
@@ -95,9 +97,33 @@ export type Detalle = {
     totalTexto: string
 }
 
+export type WompiTransaction = {
+    id: string,
+    created_at: string,
+    finalized_at: string,
+    amount_in_cents: number,
+    reference: string,
+    customer_email: string,
+    currency: string,
+    payment_method_type: string,
+    payment_method: any,
+    status: 'APPROVED' | 'DECLINED' | 'ERROR',
+    status_message: string,
+    shipping_address: any | null,
+    redirect_url: string | null,
+    payment_source_id: any | null,
+    payment_link_id: string | null,
+    customer_data: WompiCustomerData,
+    billing_data: any | null
+}
+
+export type WompiData = {
+    transaction: WompiTransaction
+}
+
 export type WompiEventResponse = {
     event: string,
-    data: any,
+    data: WompiData | any,
     environment: string,
     signature: {
         properties: any,
