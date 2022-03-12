@@ -1,10 +1,13 @@
 import AuDetailEC from '@/components/AuDetailEC';
 import AuDetailTableEC from '@/components/AuDetailTableEC';
 import DefaultLayout from '@/layouts/default';
-import { mockDetalladoEstadoCuenta } from '@/lib/mock';
-import { EstadoCuentaDetallado } from '@/types/ApiResponses';
+import { EstadosCuentaDetalladoResponse } from '@/types/ApiResponses';
 import { NextPageAuth } from '@/types/AuthPages';
-import { DetailHeaders, TableDetailHeaders } from '@/types/PropTypes';
+import {
+  DetailHeaders,
+  DetallesPageProps,
+  TableDetailHeaders,
+} from '@/types/PropTypes';
 import {
   Box,
   Button,
@@ -14,11 +17,12 @@ import {
   Show,
   useBreakpointValue,
 } from '@chakra-ui/react';
-import { NextPage } from 'next';
+import ky from '@lib/ky';
+import { NextPage, NextPageContext } from 'next';
+import { getSession } from 'next-auth/react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
 import { BiArrowBack } from 'react-icons/bi';
 
 const headers: DetailHeaders = {
@@ -34,24 +38,52 @@ const detailHeaders: TableDetailHeaders = {
   total: 'TOTAL',
 };
 
-const Detalles: NextPageAuth = () => {
+export async function getServerSideProps(ctx: NextPageContext) {
+  if (ctx.query?.ref === undefined) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/',
+      },
+      props: {},
+    };
+  }
+
+  try {
+    const session = await getSession(ctx);
+    const detalle: EstadosCuentaDetalladoResponse = await ky
+      .get(
+        `estadosdecuenta/getestadocuenta/ActivoUrbano/${
+          ctx.query.ref as string
+        }`,
+        {
+          headers: {
+            Authorization: `Bearer ${session?.accessToken}`,
+          },
+        }
+      )
+      .json();
+
+    return {
+      props: {
+        estadoCuenta: detalle.data,
+      },
+    };
+  } catch (error) {
+    return {
+      props: {},
+      redirect: { permanent: false, destination: '/?error=detalles' },
+    };
+  }
+}
+
+const Detalles: NextPageAuth<DetallesPageProps> = ({ estadoCuenta }) => {
   const router = useRouter();
   const ref = router.query?.ref;
   const justifyContent = useBreakpointValue({
     base: 'space-between',
     md: 'space-evenly',
   });
-
-  const estadoCuenta: EstadoCuentaDetallado = mockDetalladoEstadoCuenta(
-    ref as string
-  );
-
-  useEffect(() => {
-    if (ref === undefined) {
-      router.push('/');
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <>

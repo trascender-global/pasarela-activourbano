@@ -114,3 +114,12 @@ export type AuDetailTableECProps = {
 export type RedirectPageProps = {
     transaction: WompiTransaction
 }
+
+export type DetallesPageProps = {
+    estadoCuenta: EstadoCuentaDetallado
+}
+
+export type HomePageProps = {
+    estadosCuenta: EstadoCuenta[],
+    fetchError: boolean
+}

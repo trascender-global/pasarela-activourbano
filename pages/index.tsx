@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Heading,
   Icon,
   Input,
@@ -8,21 +9,23 @@ import {
   Select,
   Show,
   useBreakpointValue,
+  useToast,
 } from '@chakra-ui/react';
+import { BsFillEmojiDizzyFill } from 'react-icons/bs';
 import Head from 'next/head';
 import { NextPageAuth } from '@/types/AuthPages';
 import ky from '@lib/ky';
-import { useSession } from 'next-auth/react';
+import { getSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import { EstadosCuentaResponse, EstadoCuenta } from '@/types/ApiResponses';
 import AuTable from '@/components/AuTable';
-import { mockEstadosCuenta } from '@/lib/mock';
-import { TableHeaders } from '@/types/PropTypes';
+import { HomePageProps, TableHeaders } from '@/types/PropTypes';
 import AuMobileEC from '@/components/AuMobileEC';
-import { NextPage } from 'next';
+import { NextPage, NextPageContext } from 'next';
 import DefaultLayout from '@/layouts/default';
 import { BiFilter, BiSearchAlt } from 'react-icons/bi';
 import { formatCurrency, formatDate } from '@/lib/format';
+import { useRouter } from 'next/router';
 
 const headers: TableHeaders = {
   contrato_cliente: 'No. Contrato',
@@ -56,14 +59,41 @@ const orderByOptions = [
   },
 ];
 
-const Home: NextPageAuth = () => {
-  const session = useSession();
-  const [estadosCuenta, setEstadosCuenta] = useState([] as EstadoCuenta[]);
-  const [loading, setLoading] = useState(false);
-  const [fetchError, setFetchError] = useState(false);
+export async function getServerSideProps(ctx: NextPageContext) {
+  try {
+    const session = await getSession(ctx);
+
+    const res: EstadosCuentaResponse = await ky
+      .get('estadosdecuenta/getestadosdecuenta/ActivoUrbano', {
+        headers: {
+          Authorization: `Bearer ${session?.accessToken}`,
+        },
+      })
+      .json();
+    const estadosCuenta = res.data;
+
+    return {
+      props: {
+        estadosCuenta,
+      },
+    };
+  } catch (error) {
+    return {
+      props: {
+        fetchError: true,
+      },
+    };
+  }
+}
+
+const Home: NextPageAuth<HomePageProps> = ({ estadosCuenta, fetchError }) => {
+  const router = useRouter();
+  const toast = useToast();
   const width = useBreakpointValue({ base: 'full', md: 'auto' });
+
   const [orderBy, setOrderBy] = useState('0');
   const [filter, setFilter] = useState('');
+  const [refreshing, setRefreshing] = useState(false);
 
   const filterEC = (item: EstadoCuenta): boolean => {
     return Object.values({
@@ -86,27 +116,21 @@ const Home: NextPageAuth = () => {
     return 0;
   };
 
-  useEffect(() => {
-    async function getEstadosCuenta() {
-      try {
-        setLoading(true);
-        const res: EstadosCuentaResponse = await ky
-          .get('estadosdecuenta/getestadosdecuenta/ActivoUrbano', {
-            headers: {
-              Authorization: `Bearer ${session.data?.accessToken}`,
-            },
-          })
-          .json();
+  const refresh = () => {
+    router.reload();
+    setRefreshing(true);
+  };
 
-        const estadosCuenta = res.data;
-        setEstadosCuenta(mockEstadosCuenta(25));
-        setLoading(false);
-      } catch (error) {
-        setFetchError(true);
-        setLoading(false);
-      }
+  useEffect(() => {
+    setRefreshing(false);
+    if (router.query?.error) {
+      toast({
+        title: `Ocurrió un error cargando ${router.query?.error}`,
+        description: 'Inténtelo de nuevo.',
+        isClosable: true,
+        status: 'error',
+      });
     }
-    getEstadosCuenta();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -123,14 +147,30 @@ const Home: NextPageAuth = () => {
         display="flex"
         flexGrow={1}
         overflow="auto"
-        flexDir={loading || fetchError ? 'row' : 'column'}
-        justifyContent={loading || fetchError ? 'center' : 'start'}
-        alignItems={loading || fetchError ? 'center' : 'start'}
+        flexDir={fetchError ? 'row' : 'column'}
+        justifyContent={fetchError ? 'center' : 'start'}
+        alignItems={fetchError ? 'center' : 'start'}
       >
-        {loading ? (
-          <Box>Cargando</Box>
-        ) : fetchError ? (
-          <Box>Hubo un error</Box>
+        {fetchError ? (
+          <Box display="flex" flexDir="column" alignItems="center">
+            <i>
+              <Icon as={BsFillEmojiDizzyFill} w={24} h={24} color="red.500" />
+            </i>
+            <Heading>Ocurrió un error cargando los detalles.</Heading>
+            <Button
+              mt={24}
+              colorScheme="yellow"
+              bgColor="yellow.500"
+              _hover={{ backgroundColor: 'yellow.600' }}
+              rounded="full"
+              isLoading={refreshing}
+              onClick={() => {
+                refresh();
+              }}
+            >
+              Reintentar
+            </Button>
+          </Box>
         ) : (
           <>
             <Box
@@ -141,6 +181,7 @@ const Home: NextPageAuth = () => {
               flexWrap="wrap"
             >
               <Heading
+                id="estados-cuenta"
                 size="md"
                 style={{
                   width,

@@ -12,4 +12,8 @@ describe('Home page', () => {
         cy.get('#navbar').should('have.attr', 'role', 'navigation')
         cy.get('#logout-btn').should('be.visible')
     })
+
+    it('should have a heading', () => {
+        cy.get('#estados-cuenta').should('have.text', 'Estados de Cuenta')
+    })
 })
