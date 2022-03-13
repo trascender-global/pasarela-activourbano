@@ -25,7 +25,7 @@ COPY yarn.lock ./
 
 RUN yarn --prod
 
-COPY --from=development /usr/src/app/dist ./dist
+COPY --from=development /usr/src/app/build ./build
 
 EXPOSE 3000
 
