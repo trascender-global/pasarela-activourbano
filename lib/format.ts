@@ -11,8 +11,11 @@ type DateOptions = {
     day?: 'numeric' | '2-digit'
 }
 
-export function formatCurrency(n: number, { locale, currency }: CurrencyOptions = {}) {
+export function formatCurrency(n: number | string, { locale, currency }: CurrencyOptions = {}) {
     const options = { style: 'currency', currency: currency || 'COP' }
+    if (typeof n === 'string') {
+        return new Intl.NumberFormat(locale || 'es-419', options).format(Number.parseFloat(n));
+    }
     return new Intl.NumberFormat(locale || 'es-419', options).format(n);
 }
 

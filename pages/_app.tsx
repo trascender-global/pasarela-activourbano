@@ -12,7 +12,11 @@ function MyApp({
     <SessionProvider session={session}>
       <ChakraProvider>
         <AuthGuard guest={!Component.auth}>
-          <Component {...pageProps} />
+          {Component.layout ? (
+            Component.layout(<Component {...pageProps} />)
+          ) : (
+            <Component {...pageProps} />
+          )}
         </AuthGuard>
       </ChakraProvider>
     </SessionProvider>

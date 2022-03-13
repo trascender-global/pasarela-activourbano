@@ -5,6 +5,9 @@ describe('Login page', () => {
     const validId = '1234'
 
     beforeEach(() => {
+        if (window.location.href === Cypress.config().baseUrl + '/') {
+            cy.get('#logout-btn').click()
+        }
         cy.visit('/auth/login')
     })
 

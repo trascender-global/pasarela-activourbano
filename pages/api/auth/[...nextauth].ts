@@ -22,7 +22,8 @@ export default NextAuth({
                     const token = res.data
 
                     return {
-                        token
+                        token,
+                        id: credentials?.id
                     }
                 } catch (error) {
                     return null
@@ -34,12 +35,14 @@ export default NextAuth({
         jwt({ user, token }) {
             if (user) {
                 token.accessToken = user.token
+                token.id = user.id
             }
             return token
         },
         session({ session, token }) {
             if (token) {
                 session.accessToken = token.accessToken
+                session.id = token.id
             }
             return session
         }
