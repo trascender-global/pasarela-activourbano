@@ -24,7 +24,6 @@ const AuDetailTableEC: FC<AuDetailTableECProps> = ({
   referencia,
 }) => {
   const session = useSession();
-  console.log(session);
 
   const [checkedDetails, setCheckedDetails] = useState(
     Array<boolean>(data.length).fill(false)
@@ -323,7 +322,10 @@ const AuDetailTableEC: FC<AuDetailTableECProps> = ({
               </Button>
             </form>
           </Th>
-          <Th isNumeric>
+          <Th
+            isNumeric
+            color={isChecked || isIndeterminate ? 'green.500' : 'gray.600'}
+          >
             <Show above="md">
               <span>{formatCurrency(total)}</span>
             </Show>
