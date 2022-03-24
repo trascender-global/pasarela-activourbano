@@ -16,5 +16,5 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     if (process.env.NODE_ENV === 'development') {
         console.log(body)
     }
-    res.status(200)
+    return res.status(200)
 }
