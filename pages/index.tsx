@@ -29,6 +29,7 @@ import { useRouter } from 'next/router';
 
 const headers: TableHeaders = {
   contrato_cliente: 'No. Contrato',
+  direccion_cliente: 'Dirección',
   fechacorte: 'Fecha de corte',
   valor: 'Valor',
   accion: 'Acción',
@@ -36,6 +37,7 @@ const headers: TableHeaders = {
 
 const headersMobile: TableHeaders = {
   contrato_cliente: 'No. Contrato',
+  direccion_cliente: 'Dirección',
   fechacorte: 'Fecha de corte',
   valor: 'Valor',
 };
@@ -243,7 +245,7 @@ const Home: NextPageAuth<HomePageProps> = ({ estadosCuenta, fetchError }) => {
                 </InputGroup>
               </Box>
             </Box>
-            <Show above="md">
+            <Show above="lg">
               <Box
                 bg="gray.800"
                 borderTopColor="yellow.600"
@@ -261,7 +263,7 @@ const Home: NextPageAuth<HomePageProps> = ({ estadosCuenta, fetchError }) => {
                 />
               </Box>
             </Show>
-            <Show below="md">
+            <Show below="lg">
               {estadosCuenta
                 .filter(filterEC)
                 .sort(sortEC)

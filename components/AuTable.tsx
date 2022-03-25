@@ -37,6 +37,9 @@ const AuTable: FC<TableProps> = ({ headers, body }) => {
             {headers.contrato_cliente}
           </Th>
           <Th color="yellow.500" style={{ paddingTop: '2em' }}>
+            {headers.direccion_cliente}
+          </Th>
+          <Th color="yellow.500" style={{ paddingTop: '2em' }}>
             {headers.fechacorte}
           </Th>
           <Th color="yellow.500" style={{ paddingTop: '2em' }}>
@@ -51,6 +54,7 @@ const AuTable: FC<TableProps> = ({ headers, body }) => {
         {body.map((item: EstadoCuenta, i) => (
           <Tr key={`row-${i}`}>
             <Td>{item.contrato_cliente}</Td>
+            <Td>{item.direccion_cliente}</Td>
             <Td>{formatDate(item.fechacorte)}</Td>
             <Td>{formatCurrency(item.valor)}</Td>
             <Td>

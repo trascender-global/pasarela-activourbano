@@ -1,9 +1,9 @@
 import { formatCurrency, formatDate } from '@/lib/format';
 import { MobileECProps } from '@/types/PropTypes';
-import { Box, Button, Heading, Icon, VStack } from '@chakra-ui/react';
+import { Box, Button, Heading, Icon } from '@chakra-ui/react';
 import Link from 'next/link';
 import { FC } from 'react';
-import { BiDollar, BiListOl } from 'react-icons/bi';
+import { BiDollar } from 'react-icons/bi';
 
 const AuMobileEC: FC<MobileECProps> = ({ estadoCuenta, headers, style }) => {
   return (

@@ -83,7 +83,8 @@ const PaymentCallback: NextPageAuth<RedirectPageProps> = ({ transaction }) => {
               </Heading>
               <Heading size="sm">No. {transaction.reference}</Heading>
               <Text paddingTop="2em">
-                Su información será actualizada prontamente.
+                Su información será actualizada prontamente, revise su correo
+                electrónico para más información de la transacción.
               </Text>
               <Box
                 display="flex"
@@ -106,6 +107,19 @@ const PaymentCallback: NextPageAuth<RedirectPageProps> = ({ transaction }) => {
                     {formatCurrency(transaction.amount_in_cents / 100)}
                   </span>
                 </Box>
+              </Box>
+              <Box paddingTop="1em" w="full">
+                <Link href="/" passHref>
+                  <Button
+                    colorScheme="yellow"
+                    bgColor="yellow.500"
+                    _hover={{ backgroundColor: 'yellow.600' }}
+                    isFullWidth
+                    rounded="full"
+                  >
+                    Volver al inicio
+                  </Button>
+                </Link>
               </Box>
             </>
           ) : (
