@@ -12,6 +12,7 @@ import {
   Th,
   Thead,
   Tr,
+  useBreakpointValue,
 } from '@chakra-ui/react';
 import ky from 'ky';
 import { useSession } from 'next-auth/react';
@@ -24,6 +25,7 @@ const AuDetailTableEC: FC<AuDetailTableECProps> = ({
   referencia,
 }) => {
   const session = useSession();
+  const colSpan = useBreakpointValue({ base: 3, md: 2 });
 
   const [checkedDetails, setCheckedDetails] = useState(
     Array<boolean>(data.length).fill(false)
@@ -125,7 +127,6 @@ const AuDetailTableEC: FC<AuDetailTableECProps> = ({
             />
           </Th>
           <Th>{headers.nombre_Concepto}</Th>
-          <Th>{headers.fechaDcto}</Th>
           <Th isNumeric>{headers.total}</Th>
         </Tr>
       </Thead>
@@ -143,14 +144,13 @@ const AuDetailTableEC: FC<AuDetailTableECProps> = ({
               />
             </Td>
             <Td>{d.nombre_Concepto}</Td>
-            <Td>{formatDate(d.fechaDcto)}</Td>
             <Td isNumeric>{formatCurrency(d.total)}</Td>
           </Tr>
         ))}
       </Tbody>
       <Tfoot>
         <Tr>
-          <Th colSpan={3} style={{ textAlign: 'center' }}>
+          <Th colSpan={colSpan} style={{ textAlign: 'center' }}>
             <Show below="md">
               <span style={{ display: 'inline-block', padding: '0.25em 0' }}>
                 {formatCurrency(total)}
@@ -322,14 +322,14 @@ const AuDetailTableEC: FC<AuDetailTableECProps> = ({
               </Button>
             </form>
           </Th>
-          <Th
-            isNumeric
-            color={isChecked || isIndeterminate ? 'green.500' : 'gray.600'}
-          >
-            <Show above="md">
+          <Show above="md">
+            <Th
+              isNumeric
+              color={isChecked || isIndeterminate ? 'green.500' : 'gray.600'}
+            >
               <span>{formatCurrency(total)}</span>
-            </Show>
-          </Th>
+            </Th>
+          </Show>
         </Tr>
       </Tfoot>
     </Table>
