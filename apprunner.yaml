@@ -3,7 +3,7 @@ runtime: nodejs14
 build:
   commands:
     build:
-      - yarn --production
+      - yarn
       - yarn build
 run:
   command: yarn start
