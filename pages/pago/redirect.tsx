@@ -22,7 +22,7 @@ export async function getServerSideProps(context: NextPageContext) {
 
   if (id) {
     const wompiRes: any = await ky
-      .get(process.env.WOMPI_API_URL + `/transactions/${id}`)
+      .get(process.env.NEXT_PUBLIC_WOMPI_API_URL + `/transactions/${id}`)
       .json();
     const transaction: WompiTransaction = wompiRes.data;
     return { props: { transaction } };
