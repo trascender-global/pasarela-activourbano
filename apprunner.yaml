@@ -3,19 +3,19 @@ runtime: nodejs14
 build:
   env:
     - name: NEXT_PUBLIC_APP_URL
-      value: https://j2bkuiwifm.us-east-1.awsapprunner.com
+      value: 'https://j2bkuiwifm.us-east-1.awsapprunner.com'
     - name: NEXT_PUBLIC_API_URL
-      value: https://zonaclientes.softinm.com/api
+      value: 'https://zonaclientes.softinm.com/api'
     - name: NEXTAUTH_SECRET
-      value: HeSkRyCnQLzXR8njyvsGhJ0QrtXUnhauVRhk47UuyNg
+      value: 'HeSkRyCnQLzXR8njyvsGhJ0QrtXUnhauVRhk47UuyNg'
     - name: NEXTAUTH_URL
-      value: https://j2bkuiwifm.us-east-1.awsapprunner.com
+      value: 'https://j2bkuiwifm.us-east-1.awsapprunner.com'
     - name: NEXT_PUBLIC_WOMPI_API_URL
-      value: https://sandbox.wompi.co/v1
+      value: 'https://sandbox.wompi.co/v1'
     - name: NEXT_PUBLIC_WOMPI_PUBLIC_KEY
-      value: pub_test_8G4xcWppoaQMeAIxVW5fMBUK4h2wuZzD
+      value: 'pub_test_8G4xcWppoaQMeAIxVW5fMBUK4h2wuZzD'
     - name: WOMPI_INTEGRITY
-      value: test_integrity_fvpyB7SAdoGtNjESjiR3X0kP53TWGHBj
+      value: 'test_integrity_fvpyB7SAdoGtNjESjiR3X0kP53TWGHBj'
   commands:
     build:
       - yarn
