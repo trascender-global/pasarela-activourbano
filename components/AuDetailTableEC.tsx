@@ -16,8 +16,11 @@ import {
 } from '@chakra-ui/react';
 import ky from 'ky';
 import { useSession } from 'next-auth/react';
+import getConfig from 'next/config';
 import { FC, useEffect, useState } from 'react';
 import { BiCheckShield } from 'react-icons/bi';
+
+const { publicRuntimeConfig } = getConfig();
 
 const AuDetailTableEC: FC<AuDetailTableECProps> = ({
   headers,
@@ -38,6 +41,10 @@ const AuDetailTableEC: FC<AuDetailTableECProps> = ({
   const [updatingTotal, setUpdatingTotal] = useState(false);
 
   useEffect(() => {
+    console.log(publicRuntimeConfig);
+  }, []);
+
+  useEffect(() => {
     setTotal(
       data.reduce((a, b, i) => {
         if (checkedDetails[i]) return a + b.total;
@@ -47,11 +54,11 @@ const AuDetailTableEC: FC<AuDetailTableECProps> = ({
   }, [checkedDetails, data]);
 
   const [wompi, setWompi] = useState<WompiOptions>({
-    publicKey: process.env.NEXT_PUBLIC_WOMPI_PUBLIC_KEY || '',
+    publicKey: publicRuntimeConfig.wompiPublicKey || '',
     currency: 'COP',
     amountInCents: total * 100,
     reference: referencia,
-    redirectUrl: process.env.NEXT_PUBLIC_APP_URL + '/pago/redirect',
+    redirectUrl: publicRuntimeConfig.appUrl + '/pago/redirect',
     customerData: {
       legalIdType: 'CC',
       legalId: session.data?.id as string,
@@ -63,7 +70,7 @@ const AuDetailTableEC: FC<AuDetailTableECProps> = ({
       try {
         setUpdatingTotal(true);
         const res: any = await ky
-          .post(process.env.NEXT_PUBLIC_APP_URL + '/api/wompi/integrity', {
+          .post(publicRuntimeConfig.appUrl + '/api/wompi/integrity', {
             json: {
               referencia,
               monto: (total * 100).toString(),
@@ -84,7 +91,7 @@ const AuDetailTableEC: FC<AuDetailTableECProps> = ({
         setWompi({
           ...wompi,
           amountInCents: total * 100,
-          redirectUrl: process.env.NEXT_PUBLIC_APP_URL + '/pago/redirect',
+          redirectUrl: publicRuntimeConfig.appUrl + '/pago/redirect',
         });
         setUpdatingTotal(false);
       }
