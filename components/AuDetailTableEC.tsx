@@ -41,6 +41,10 @@ const AuDetailTableEC: FC<AuDetailTableECProps> = ({
   const [updatingTotal, setUpdatingTotal] = useState(false);
 
   useEffect(() => {
+    console.log(publicRuntimeConfig);
+  }, []);
+
+  useEffect(() => {
     setTotal(
       data.reduce((a, b, i) => {
         if (checkedDetails[i]) return a + b.total;
