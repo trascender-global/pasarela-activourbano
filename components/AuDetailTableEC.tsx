@@ -197,6 +197,7 @@ const AuDetailTableEC: FC<AuDetailTableECProps> = ({
             w="full"
             display="flex"
             padding="1em"
+            marginBottom="0.5em"
           >
             <Box
               sx={{
@@ -208,9 +209,11 @@ const AuDetailTableEC: FC<AuDetailTableECProps> = ({
             >
               <Checkbox
                 colorScheme="green"
-                isChecked={checkedDetails[i]}
+                isChecked={checkedDetails[i] || d.total < 0}
+                isDisabled={d.total < 0}
                 onChange={(e) => {
-                  checkedDetails[i] = e.target.checked;
+                  if (d.total > 0) checkedDetails[i] = e.target.checked;
+                  else checkedDetails[i] = true;
                   setCheckedDetails([...checkedDetails]);
                 }}
               />
