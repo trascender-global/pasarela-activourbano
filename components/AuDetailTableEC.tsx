@@ -47,7 +47,7 @@ const AuDetailTableEC: FC<AuDetailTableECProps> = ({
   useEffect(() => {
     setTotal(
       data.reduce((a, b, i) => {
-        if (checkedDetails[i]) return a + b.total;
+        if (checkedDetails[i] || b.total < 0) return Math.max(a + b.total, 0);
         return a;
       }, 0)
     );
@@ -149,24 +149,24 @@ const AuDetailTableEC: FC<AuDetailTableECProps> = ({
               </Tr>
             </Thead>
             <Tbody>
-              {data
-                .filter((d) => d.total > 0)
-                .map((d, i) => (
-                  <Tr key={`detail-${i}`}>
-                    <Td>
-                      <Checkbox
-                        colorScheme="green"
-                        isChecked={checkedDetails[i]}
-                        onChange={(e) => {
-                          checkedDetails[i] = e.target.checked;
-                          setCheckedDetails([...checkedDetails]);
-                        }}
-                      />
-                    </Td>
-                    <Td>{d.nombre_Concepto}</Td>
-                    <Td isNumeric>{formatCurrency(d.total)}</Td>
-                  </Tr>
-                ))}
+              {data.map((d, i) => (
+                <Tr key={`detail-${i}`}>
+                  <Td>
+                    <Checkbox
+                      colorScheme="green"
+                      isChecked={checkedDetails[i] || d.total < 0}
+                      isDisabled={d.total < 0}
+                      onChange={(e) => {
+                        if (d.total > 0) checkedDetails[i] = e.target.checked;
+                        else checkedDetails[i] = true;
+                        setCheckedDetails([...checkedDetails]);
+                      }}
+                    />
+                  </Td>
+                  <Td>{d.nombre_Concepto}</Td>
+                  <Td isNumeric>{formatCurrency(d.total)}</Td>
+                </Tr>
+              ))}
             </Tbody>
           </Table>
         </Box>
@@ -189,57 +189,50 @@ const AuDetailTableEC: FC<AuDetailTableECProps> = ({
             SELECCIONAR TODO
           </Heading>
         </Box>
-        {data
-          .filter((d) => d.total > 0)
-          .map((d, i) => (
+        {data.map((d, i) => (
+          <Box
+            key={`detail-${i}`}
+            bg="gray.800"
+            borderTopColor="yellow.600"
+            borderTopWidth="5px"
+            borderRadius="lg"
+            boxShadow="base"
+            overflowX="auto"
+            w="full"
+            display="flex"
+            padding="1em"
+          >
             <Box
-              key={`detail-${i}`}
-              bg="gray.800"
-              borderTopColor="yellow.600"
-              borderTopWidth="5px"
-              borderRadius="lg"
-              boxShadow="base"
-              overflowX="auto"
-              w="full"
-              display="flex"
-              padding="1em"
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                padding: '0.5em',
+              }}
             >
-              <Box
-                sx={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  padding: '0.5em',
+              <Checkbox
+                colorScheme="green"
+                isChecked={checkedDetails[i]}
+                onChange={(e) => {
+                  checkedDetails[i] = e.target.checked;
+                  setCheckedDetails([...checkedDetails]);
                 }}
-              >
-                <Checkbox
-                  colorScheme="green"
-                  isChecked={checkedDetails[i]}
-                  onChange={(e) => {
-                    checkedDetails[i] = e.target.checked;
-                    setCheckedDetails([...checkedDetails]);
-                  }}
-                />
-              </Box>
-              <Box
-                paddingX="1em"
-                paddingY="0.25em"
-                sx={{ display: 'flex', flexDir: 'column', flexGrow: 1 }}
-              >
-                <Heading
-                  as="span"
-                  color="yellow.500"
-                  size="sm"
-                  textAlign="right"
-                >
-                  {d.nombre_Concepto}
-                </Heading>
-                <Text as="span" textAlign="right">
-                  {formatCurrency(d.total)}
-                </Text>
-              </Box>
+              />
             </Box>
-          ))}
+            <Box
+              paddingX="1em"
+              paddingY="0.25em"
+              sx={{ display: 'flex', flexDir: 'column', flexGrow: 1 }}
+            >
+              <Heading as="span" color="yellow.500" size="sm" textAlign="right">
+                {d.nombre_Concepto}
+              </Heading>
+              <Text as="span" textAlign="right">
+                {formatCurrency(d.total)}
+              </Text>
+            </Box>
+          </Box>
+        ))}
       </Show>
       <Box style={{ padding: '1em 0.5em' }}>
         <form action="https://checkout.wompi.co/p/" method="GET">
