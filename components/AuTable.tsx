@@ -64,7 +64,7 @@ const AuTable: FC<TableProps> = ({ headers, body }) => {
               >
                 <Button colorScheme="green" rounded="full">
                   <Icon as={BiDollar} marginRight={1} marginTop={0.5} />
-                  <span>Pagar</span>
+                  <span>Ver detalle</span>
                 </Button>
               </Link>
             </Td>

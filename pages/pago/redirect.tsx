@@ -16,13 +16,16 @@ import { NextPage, NextPageContext } from 'next';
 import Head from 'next/head';
 import { formatCurrency, formatDate } from '@/lib/format';
 import Link from 'next/link';
+import getConfig from 'next/config';
+
+const { publicRuntimeConfig } = getConfig();
 
 export async function getServerSideProps(context: NextPageContext) {
   const id = context.query?.id;
 
   if (id) {
     const wompiRes: any = await ky
-      .get(process.env.NEXT_PUBLIC_WOMPI_API_URL + `/transactions/${id}`)
+      .get(publicRuntimeConfig.wompiApiUrl + `/transactions/${id}`)
       .json();
     const transaction: WompiTransaction = wompiRes.data;
     return { props: { transaction } };
@@ -69,7 +72,6 @@ const PaymentCallback: NextPageAuth<RedirectPageProps> = ({ transaction }) => {
           borderTopWidth="5px"
           borderRadius="lg"
           boxShadow="base"
-          overflow="hidden"
           w={width}
           color="white"
           padding="2em"

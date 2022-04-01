@@ -96,7 +96,7 @@ const Login: NextPageAuth = () => {
               <form id="login-form" onSubmit={handleSubmit(onSubmit)}>
                 <FormControl isInvalid={!!errors.id}>
                   <FormLabel htmlFor="user-id" color="white">
-                    Documento de identidad
+                    Ingrese el número de cédula del titular del contrato
                   </FormLabel>
                   <InputGroup>
                     <InputLeftElement pointerEvents="none">
@@ -120,9 +120,7 @@ const Login: NextPageAuth = () => {
                       <span> Tu documento de identidad es válido.</span>
                     </FormHelperText>
                   ) : (
-                    <FormHelperText color="gray.400">
-                      Ingresa tu documento de identidad
-                    </FormHelperText>
+                    <FormHelperText color="gray.400">&nbsp;</FormHelperText>
                   )}
                 </FormControl>
                 <Button

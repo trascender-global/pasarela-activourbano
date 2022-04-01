@@ -154,21 +154,11 @@ const Detalles: NextPageAuth<DetallesPageProps> = ({ estadoCuenta }) => {
             <AuDetailEC headers={headers} estadoCuenta={estadoCuenta} />
           </Box>
           <Box paddingTop="2em" flexGrow={1} maxW="full">
-            <Box
-              bg="gray.800"
-              borderTopColor="yellow.600"
-              borderTopWidth="5px"
-              borderRadius="lg"
-              boxShadow="base"
-              overflow="auto"
-              w="full"
-            >
-              <AuDetailTableEC
-                headers={detailHeaders}
-                data={estadoCuenta.listaDetalles}
-                referencia={ref as string}
-              />
-            </Box>
+            <AuDetailTableEC
+              headers={detailHeaders}
+              data={estadoCuenta.listaDetalles}
+              referencia={ref as string}
+            />
           </Box>
         </Box>
       </Box>
