@@ -41,10 +41,6 @@ const AuDetailTableEC: FC<AuDetailTableECProps> = ({
   const [updatingTotal, setUpdatingTotal] = useState(false);
 
   useEffect(() => {
-    console.log(publicRuntimeConfig);
-  }, []);
-
-  useEffect(() => {
     setTotal(
       data.reduce((a, b, i) => {
         if (checkedDetails[i] || b.total < 0) return Math.max(a + b.total, 0);
