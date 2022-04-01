@@ -40,7 +40,7 @@ const AuMobileEC: FC<MobileECProps> = ({ estadoCuenta, headers, style }) => {
         >
           <Button colorScheme="green" rounded="full" isFullWidth>
             <Icon as={BiDollar} marginRight={1} marginTop={0.5} />
-            <span>Pagar</span>
+            <span>Ver detalle</span>
           </Button>
         </Link>
       </Box>

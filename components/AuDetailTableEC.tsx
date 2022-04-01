@@ -1,18 +1,19 @@
-import { formatCurrency, formatDate } from '@/lib/format';
+import { formatCurrency } from '@/lib/format';
 import { AuDetailTableECProps, WompiOptions } from '@/types/PropTypes';
 import {
+  Box,
   Button,
   Checkbox,
+  Heading,
   Icon,
   Show,
   Table,
   Tbody,
   Td,
-  Tfoot,
+  Text,
   Th,
   Thead,
   Tr,
-  useBreakpointValue,
 } from '@chakra-ui/react';
 import ky from 'ky';
 import { useSession } from 'next-auth/react';
@@ -28,7 +29,6 @@ const AuDetailTableEC: FC<AuDetailTableECProps> = ({
   referencia,
 }) => {
   const session = useSession();
-  const colSpan = useBreakpointValue({ base: 3, md: 2 });
 
   const [checkedDetails, setCheckedDetails] = useState(
     Array<boolean>(data.length).fill(false)
@@ -104,242 +104,319 @@ const AuDetailTableEC: FC<AuDetailTableECProps> = ({
   // https://docs.wompi.co/docs/en/widget-checkout-web#bot%C3%B3n-personalizado-opcional
 
   return (
-    <Table
-      variant="striped"
-      colorScheme="blackAlpha"
-      size="lg"
-      style={{ maxWidth: '100%' }}
-    >
-      <Thead
-        backgroundColor="gray.800"
-        style={{
-          position: 'sticky',
-          top: '0',
-          zIndex: '10',
-        }}
-      >
-        <Tr>
-          <Th>
-            <Checkbox
-              colorScheme="green"
-              isIndeterminate={isIndeterminate}
-              isChecked={isChecked}
-              onChange={() => {
-                if (isChecked) {
-                  setCheckedDetails(Array<boolean>(data.length).fill(false));
-                } else {
-                  setCheckedDetails(Array<boolean>(data.length).fill(true));
-                }
-              }}
-            />
-          </Th>
-          <Th>{headers.nombre_Concepto}</Th>
-          <Th isNumeric>{headers.total}</Th>
-        </Tr>
-      </Thead>
-      <Tbody>
-        {data.map((d, i) => (
-          <Tr key={`detail-${i}`}>
-            <Td>
-              <Checkbox
-                colorScheme="green"
-                isChecked={checkedDetails[i]}
-                onChange={(e) => {
-                  checkedDetails[i] = e.target.checked;
-                  setCheckedDetails([...checkedDetails]);
-                }}
-              />
-            </Td>
-            <Td>{d.nombre_Concepto}</Td>
-            <Td isNumeric>{formatCurrency(d.total)}</Td>
-          </Tr>
-        ))}
-      </Tbody>
-      <Tfoot>
-        <Tr>
-          <Th colSpan={colSpan} style={{ textAlign: 'center' }}>
-            <Show below="md">
-              <span style={{ display: 'inline-block', padding: '0.25em 0' }}>
-                {formatCurrency(total)}
-              </span>
-            </Show>
-            <form action="https://checkout.wompi.co/p/" method="GET">
-              <input type="hidden" name="public-key" value={wompi.publicKey} />
-              <input type="hidden" name="currency" value={wompi.currency} />
-              <input
-                type="hidden"
-                name="amount-in-cents"
-                value={wompi.amountInCents}
-              />
-              <input type="hidden" name="reference" value={wompi.reference} />
-              {wompi.signatureIntegrity ? (
-                <input
-                  type="hidden"
-                  name="signature:integrity"
-                  value={wompi.signatureIntegrity}
-                />
-              ) : (
-                <></>
-              )}
-              {wompi.redirectUrl ? (
-                <input
-                  type="hidden"
-                  name="redirect-url"
-                  value={wompi.redirectUrl}
-                />
-              ) : (
-                <></>
-              )}
-              {wompi.taxInCents?.vat ? (
-                <input
-                  type="hidden"
-                  name="tax-in-cents:vat"
-                  value={wompi.taxInCents.vat}
-                />
-              ) : (
-                <></>
-              )}
-              {wompi.taxInCents?.consumption ? (
-                <input
-                  type="hidden"
-                  name="tax-in-cents:consumption"
-                  value={wompi.taxInCents.consumption}
-                />
-              ) : (
-                <></>
-              )}
-              {wompi.customerData?.email ? (
-                <input
-                  type="hidden"
-                  name="customer-data:email"
-                  value={wompi.customerData.email}
-                />
-              ) : (
-                <></>
-              )}
-              {wompi.customerData?.fullName ? (
-                <input
-                  type="hidden"
-                  name="customer-data:full-name"
-                  value={wompi.customerData.fullName}
-                />
-              ) : (
-                <></>
-              )}
-              {wompi.customerData?.phoneNumber ? (
-                <input
-                  type="hidden"
-                  name="customer-data:phone-number"
-                  value={wompi.customerData.phoneNumber}
-                />
-              ) : (
-                <></>
-              )}
-              {wompi.customerData?.phoneNumberPrefix ? (
-                <input
-                  type="hidden"
-                  name="customer-data:phone-number-prefix"
-                  value={wompi.customerData.phoneNumberPrefix}
-                />
-              ) : (
-                <></>
-              )}
-              {wompi.customerData?.legalId ? (
-                <input
-                  type="hidden"
-                  name="customer-data:legal-id"
-                  value={wompi.customerData.legalId}
-                />
-              ) : (
-                <></>
-              )}
-              {wompi.customerData?.legalIdType ? (
-                <input
-                  type="hidden"
-                  name="customer-data:legal-id-type"
-                  value={wompi.customerData.legalIdType}
-                />
-              ) : (
-                <></>
-              )}
-              {wompi.shippingAddress?.addressLine1 ? (
-                <input
-                  type="hidden"
-                  name="shipping-address:address-line-1"
-                  value={wompi.shippingAddress.addressLine1}
-                />
-              ) : (
-                <></>
-              )}
-              {wompi.shippingAddress?.addressLine2 ? (
-                <input
-                  type="hidden"
-                  name="shipping-address:address-line-2"
-                  value={wompi.shippingAddress.addressLine2}
-                />
-              ) : (
-                <></>
-              )}
-              {wompi.shippingAddress?.country ? (
-                <input
-                  type="hidden"
-                  name="shipping-address:country"
-                  value={wompi.shippingAddress.country}
-                />
-              ) : (
-                <></>
-              )}
-              {wompi.shippingAddress?.phoneNumber ? (
-                <input
-                  type="hidden"
-                  name="shipping-address:phone-number"
-                  value={wompi.shippingAddress.phoneNumber}
-                />
-              ) : (
-                <></>
-              )}
-              {wompi.shippingAddress?.city ? (
-                <input
-                  type="hidden"
-                  name="shipping-address:city"
-                  value={wompi.shippingAddress.city}
-                />
-              ) : (
-                <></>
-              )}
-              {wompi.shippingAddress?.region ? (
-                <input
-                  type="hidden"
-                  name="shipping-address:region"
-                  value={wompi.shippingAddress.region}
-                />
-              ) : (
-                <></>
-              )}
-              <Button
-                colorScheme="green"
-                rounded="full"
-                isFullWidth
-                type="submit"
-                isLoading={updatingTotal}
-                disabled={(!isChecked && !isIndeterminate) || updatingTotal}
-              >
-                <Icon as={BiCheckShield} marginRight={1} marginTop={0.5} />
-                <span>Pagar con Wompi</span>
-              </Button>
-            </form>
-          </Th>
-          <Show above="md">
-            <Th
-              isNumeric
-              color={isChecked || isIndeterminate ? 'green.500' : 'gray.600'}
+    <>
+      <Show above="md">
+        <Box
+          bg="gray.800"
+          borderTopColor="yellow.600"
+          borderTopWidth="5px"
+          borderRadius="lg"
+          boxShadow="base"
+          overflowX="auto"
+          w="full"
+          sx={{
+            scrollbarColor: '#b7791f #1a202c',
+          }}
+        >
+          <Table
+            variant="striped"
+            colorScheme="blackAlpha"
+            size="lg"
+            style={{ maxWidth: '100%' }}
+          >
+            <Thead backgroundColor="gray.800">
+              <Tr>
+                <Th>
+                  <Checkbox
+                    colorScheme="green"
+                    isIndeterminate={isIndeterminate}
+                    isChecked={isChecked}
+                    onChange={() => {
+                      if (isChecked) {
+                        setCheckedDetails(
+                          Array<boolean>(data.length).fill(false)
+                        );
+                      } else {
+                        setCheckedDetails(
+                          Array<boolean>(data.length).fill(true)
+                        );
+                      }
+                    }}
+                  />
+                </Th>
+                <Th>{headers.nombre_Concepto}</Th>
+                <Th isNumeric>{headers.total}</Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              {data
+                .filter((d) => d.total > 0)
+                .map((d, i) => (
+                  <Tr key={`detail-${i}`}>
+                    <Td>
+                      <Checkbox
+                        colorScheme="green"
+                        isChecked={checkedDetails[i]}
+                        onChange={(e) => {
+                          checkedDetails[i] = e.target.checked;
+                          setCheckedDetails([...checkedDetails]);
+                        }}
+                      />
+                    </Td>
+                    <Td>{d.nombre_Concepto}</Td>
+                    <Td isNumeric>{formatCurrency(d.total)}</Td>
+                  </Tr>
+                ))}
+            </Tbody>
+          </Table>
+        </Box>
+      </Show>
+      <Show below="md">
+        <Box padding="1em" display="flex" alignItems="center" gap="1em">
+          <Checkbox
+            colorScheme="green"
+            isIndeterminate={isIndeterminate}
+            isChecked={isChecked}
+            onChange={() => {
+              if (isChecked) {
+                setCheckedDetails(Array<boolean>(data.length).fill(false));
+              } else {
+                setCheckedDetails(Array<boolean>(data.length).fill(true));
+              }
+            }}
+          />
+          <Heading as="h3" size="sm" sx={{ display: 'inline-block' }}>
+            SELECCIONAR TODO
+          </Heading>
+        </Box>
+        {data
+          .filter((d) => d.total > 0)
+          .map((d, i) => (
+            <Box
+              key={`detail-${i}`}
+              bg="gray.800"
+              borderTopColor="yellow.600"
+              borderTopWidth="5px"
+              borderRadius="lg"
+              boxShadow="base"
+              overflowX="auto"
+              w="full"
+              display="flex"
+              padding="1em"
             >
-              <span>{formatCurrency(total)}</span>
-            </Th>
-          </Show>
-        </Tr>
-      </Tfoot>
-    </Table>
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  padding: '0.5em',
+                }}
+              >
+                <Checkbox
+                  colorScheme="green"
+                  isChecked={checkedDetails[i]}
+                  onChange={(e) => {
+                    checkedDetails[i] = e.target.checked;
+                    setCheckedDetails([...checkedDetails]);
+                  }}
+                />
+              </Box>
+              <Box
+                paddingX="1em"
+                paddingY="0.25em"
+                sx={{ display: 'flex', flexDir: 'column', flexGrow: 1 }}
+              >
+                <Heading
+                  as="span"
+                  color="yellow.500"
+                  size="sm"
+                  textAlign="right"
+                >
+                  {d.nombre_Concepto}
+                </Heading>
+                <Text as="span" textAlign="right">
+                  {formatCurrency(d.total)}
+                </Text>
+              </Box>
+            </Box>
+          ))}
+      </Show>
+      <Box style={{ padding: '1em 0.5em' }}>
+        <form action="https://checkout.wompi.co/p/" method="GET">
+          <input type="hidden" name="public-key" value={wompi.publicKey} />
+          <input type="hidden" name="currency" value={wompi.currency} />
+          <input
+            type="hidden"
+            name="amount-in-cents"
+            value={wompi.amountInCents}
+          />
+          <input type="hidden" name="reference" value={wompi.reference} />
+          {wompi.signatureIntegrity ? (
+            <input
+              type="hidden"
+              name="signature:integrity"
+              value={wompi.signatureIntegrity}
+            />
+          ) : (
+            <></>
+          )}
+          {wompi.redirectUrl ? (
+            <input
+              type="hidden"
+              name="redirect-url"
+              value={wompi.redirectUrl}
+            />
+          ) : (
+            <></>
+          )}
+          {wompi.taxInCents?.vat ? (
+            <input
+              type="hidden"
+              name="tax-in-cents:vat"
+              value={wompi.taxInCents.vat}
+            />
+          ) : (
+            <></>
+          )}
+          {wompi.taxInCents?.consumption ? (
+            <input
+              type="hidden"
+              name="tax-in-cents:consumption"
+              value={wompi.taxInCents.consumption}
+            />
+          ) : (
+            <></>
+          )}
+          {wompi.customerData?.email ? (
+            <input
+              type="hidden"
+              name="customer-data:email"
+              value={wompi.customerData.email}
+            />
+          ) : (
+            <></>
+          )}
+          {wompi.customerData?.fullName ? (
+            <input
+              type="hidden"
+              name="customer-data:full-name"
+              value={wompi.customerData.fullName}
+            />
+          ) : (
+            <></>
+          )}
+          {wompi.customerData?.phoneNumber ? (
+            <input
+              type="hidden"
+              name="customer-data:phone-number"
+              value={wompi.customerData.phoneNumber}
+            />
+          ) : (
+            <></>
+          )}
+          {wompi.customerData?.phoneNumberPrefix ? (
+            <input
+              type="hidden"
+              name="customer-data:phone-number-prefix"
+              value={wompi.customerData.phoneNumberPrefix}
+            />
+          ) : (
+            <></>
+          )}
+          {wompi.customerData?.legalId ? (
+            <input
+              type="hidden"
+              name="customer-data:legal-id"
+              value={wompi.customerData.legalId}
+            />
+          ) : (
+            <></>
+          )}
+          {wompi.customerData?.legalIdType ? (
+            <input
+              type="hidden"
+              name="customer-data:legal-id-type"
+              value={wompi.customerData.legalIdType}
+            />
+          ) : (
+            <></>
+          )}
+          {wompi.shippingAddress?.addressLine1 ? (
+            <input
+              type="hidden"
+              name="shipping-address:address-line-1"
+              value={wompi.shippingAddress.addressLine1}
+            />
+          ) : (
+            <></>
+          )}
+          {wompi.shippingAddress?.addressLine2 ? (
+            <input
+              type="hidden"
+              name="shipping-address:address-line-2"
+              value={wompi.shippingAddress.addressLine2}
+            />
+          ) : (
+            <></>
+          )}
+          {wompi.shippingAddress?.country ? (
+            <input
+              type="hidden"
+              name="shipping-address:country"
+              value={wompi.shippingAddress.country}
+            />
+          ) : (
+            <></>
+          )}
+          {wompi.shippingAddress?.phoneNumber ? (
+            <input
+              type="hidden"
+              name="shipping-address:phone-number"
+              value={wompi.shippingAddress.phoneNumber}
+            />
+          ) : (
+            <></>
+          )}
+          {wompi.shippingAddress?.city ? (
+            <input
+              type="hidden"
+              name="shipping-address:city"
+              value={wompi.shippingAddress.city}
+            />
+          ) : (
+            <></>
+          )}
+          {wompi.shippingAddress?.region ? (
+            <input
+              type="hidden"
+              name="shipping-address:region"
+              value={wompi.shippingAddress.region}
+            />
+          ) : (
+            <></>
+          )}
+          <Button
+            colorScheme="green"
+            rounded="full"
+            isFullWidth
+            type="submit"
+            isLoading={updatingTotal}
+            disabled={(!isChecked && !isIndeterminate) || updatingTotal}
+          >
+            <Icon as={BiCheckShield} marginRight={1} marginTop={0.5} />
+            <span>Pagar {formatCurrency(total)}</span>
+          </Button>
+          <Heading
+            color="gray.500"
+            size="xs"
+            textAlign="center"
+            paddingTop="0.25em"
+          >
+            * Pagos realizados a través de Wompi
+          </Heading>
+        </form>
+      </Box>
+    </>
   );
 };
 
