@@ -43,7 +43,7 @@ const AuDetailTableEC: FC<AuDetailTableECProps> = ({
   useEffect(() => {
     setTotal(
       data.reduce((a, b, i) => {
-        if (checkedDetails[i] || b.total < 0) return Math.max(a + b.total, 0);
+        if (checkedDetails[i] && b.total > 0) return a + b.total;
         return a;
       }, 0)
     );

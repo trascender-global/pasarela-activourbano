@@ -27,7 +27,14 @@ const AuDetailEC: FC<AuDetailECProps> = ({ headers, estadoCuenta, style }) => {
           <Heading color="yellow.500" size="sm">
             VALOR SIN RECARGO
           </Heading>
-          <span>{formatCurrency(estadoCuenta.valor_sin_Recargo)}</span>
+          <span>
+            {formatCurrency(
+              estadoCuenta.listaDetalles.reduce((a, b, i) => {
+                if (b.total > 0) return a + b.total;
+                return a;
+              }, 0)
+            )}
+          </span>
         </Box>
       </Box>
       <Box display="flex" flexWrap="wrap" justifyContent="flex-start">
@@ -41,7 +48,14 @@ const AuDetailEC: FC<AuDetailECProps> = ({ headers, estadoCuenta, style }) => {
           <Heading color="yellow.500" size="sm">
             VALOR CON RECARGO
           </Heading>
-          <span>{formatCurrency(estadoCuenta.valor_sin_Recargo)}</span>
+          <span>
+            {formatCurrency(
+              estadoCuenta.listaDetalles.reduce((a, b, i) => {
+                if (b.total > 0) return a + b.total;
+                return a;
+              }, 0)
+            )}
+          </span>
         </Box>
       </Box>
       <Divider style={{ margin: '1em 0' }} />
