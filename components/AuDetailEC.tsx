@@ -6,7 +6,7 @@ import { FC } from 'react';
 const AuDetailEC: FC<AuDetailECProps> = ({ headers, estadoCuenta, style }) => {
   return (
     <Box
-      bg="gray.800"
+      bg="whiteAlpha.100"
       borderTopColor="yellow.600"
       borderTopWidth="5px"
       borderRadius="lg"
@@ -17,13 +17,13 @@ const AuDetailEC: FC<AuDetailECProps> = ({ headers, estadoCuenta, style }) => {
       style={style}
     >
       <Box display="flex" flexWrap="wrap" justifyContent="flex-start">
-        <Box paddingX="1em" paddingY="0.25em" w="50%">
+        <Box paddingX="1em" paddingY="0.25em" flexGrow={1}>
           <Heading color="yellow.500" size="sm">
             FECHA DE PAGO SIN RECARGO
           </Heading>
           <span>{formatDate(estadoCuenta.fechaVencimiento)}</span>
         </Box>
-        <Box paddingX="1em" paddingY="0.25em" w="50%">
+        <Box paddingX="1em" paddingY="0.25em" flexGrow={1}>
           <Heading color="yellow.500" size="sm">
             VALOR SIN RECARGO
           </Heading>
@@ -38,13 +38,13 @@ const AuDetailEC: FC<AuDetailECProps> = ({ headers, estadoCuenta, style }) => {
         </Box>
       </Box>
       <Box display="flex" flexWrap="wrap" justifyContent="flex-start">
-        <Box paddingX="1em" paddingY="0.25em" w="50%">
+        <Box paddingX="1em" paddingY="0.25em" flexGrow={1}>
           <Heading color="yellow.500" size="sm">
             FECHA DE PAGO CON RECARGO
           </Heading>
-          <span>{formatDate(estadoCuenta.fechaVencimiento)}</span>
+          <span>{formatDate(estadoCuenta.fechaVencimiento_Recargo)}</span>
         </Box>
-        <Box paddingX="1em" paddingY="0.25em" w="50%">
+        <Box paddingX="1em" paddingY="0.25em" flexGrow={1}>
           <Heading color="yellow.500" size="sm">
             VALOR CON RECARGO
           </Heading>

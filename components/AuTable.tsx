@@ -25,7 +25,7 @@ const AuTable: FC<TableProps> = ({ headers, body }) => {
       style={{ maxWidth: '100%' }}
     >
       <Thead
-        backgroundColor="gray.800"
+        backgroundColor="blackAlpha.300"
         style={{
           position: 'sticky',
           top: '0',
@@ -51,25 +51,33 @@ const AuTable: FC<TableProps> = ({ headers, body }) => {
         </Tr>
       </Thead>
       <Tbody>
-        {body.map((item: EstadoCuenta, i) => (
-          <Tr key={`row-${i}`}>
-            <Td>{item.contrato_cliente}</Td>
-            <Td>{item.direccion_cliente}</Td>
-            <Td>{formatDate(item.fechacorte)}</Td>
-            <Td>{formatCurrency(item.valor)}</Td>
-            <Td>
-              <Link
-                href={`estado-cuenta/detalles?ref=${item.referencia}`}
-                passHref
-              >
-                <Button colorScheme="green" rounded="full">
-                  <Icon as={BiDollar} marginRight={1} marginTop={0.5} />
-                  <span>Ver detalle</span>
-                </Button>
-              </Link>
+        {body.length ? (
+          body.map((item: EstadoCuenta, i) => (
+            <Tr key={`row-${i}`}>
+              <Td>{item.contrato_cliente}</Td>
+              <Td>{item.direccion_cliente}</Td>
+              <Td>{formatDate(item.fechacorte)}</Td>
+              <Td>{formatCurrency(item.valor)}</Td>
+              <Td>
+                <Link
+                  href={`estado-cuenta/detalles?ref=${item.referencia}`}
+                  passHref
+                >
+                  <Button colorScheme="green" rounded="full">
+                    <Icon as={BiDollar} marginRight={1} marginTop={0.5} />
+                    <span>Ver detalle</span>
+                  </Button>
+                </Link>
+              </Td>
+            </Tr>
+          ))
+        ) : (
+          <Tr>
+            <Td colSpan={5} textAlign="center">
+              No tienes estados de cuenta pendientes
             </Td>
           </Tr>
-        ))}
+        )}
       </Tbody>
     </Table>
   );
