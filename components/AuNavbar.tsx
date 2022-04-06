@@ -8,7 +8,7 @@ const AuNavbar: FC = ({ children }) => {
   return (
     <Box
       id="navbar"
-      bg="gray.800"
+      bg="whiteAlpha.100"
       width="full"
       display="relative"
       zIndex={10}

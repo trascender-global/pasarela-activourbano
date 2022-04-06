@@ -44,7 +44,7 @@ export type DetailHeaders = {
     direccion_Cliente?: string,
     municipio_Cliente?: string,
     // ? En el API está escrito así 
-    urbanizacion_Clente?: string,
+    urbanizacion_Clente: string,
     periodo_Canon: string,
     valor_sin_Recargo?: string,
     valor_Con_Recargo?: string,

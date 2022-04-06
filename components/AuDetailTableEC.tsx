@@ -103,7 +103,7 @@ const AuDetailTableEC: FC<AuDetailTableECProps> = ({
     <>
       <Show above="md">
         <Box
-          bg="gray.800"
+          bg="whiteAlpha.100"
           borderTopColor="yellow.600"
           borderTopWidth="5px"
           borderRadius="lg"
@@ -120,9 +120,9 @@ const AuDetailTableEC: FC<AuDetailTableECProps> = ({
             size="lg"
             style={{ maxWidth: '100%' }}
           >
-            <Thead backgroundColor="gray.800">
+            <Thead backgroundColor="blackAlpha.300">
               <Tr>
-                <Th>
+                <Th color="yellow.500">
                   <Checkbox
                     colorScheme="green"
                     isIndeterminate={isIndeterminate}
@@ -140,8 +140,10 @@ const AuDetailTableEC: FC<AuDetailTableECProps> = ({
                     }}
                   />
                 </Th>
-                <Th>{headers.nombre_Concepto}</Th>
-                <Th isNumeric>{headers.total}</Th>
+                <Th color="yellow.500">{headers.nombre_Concepto}</Th>
+                <Th color="yellow.500" isNumeric>
+                  {headers.total}
+                </Th>
               </Tr>
             </Thead>
             <Tbody>
@@ -188,7 +190,7 @@ const AuDetailTableEC: FC<AuDetailTableECProps> = ({
         {data.map((d, i) => (
           <Box
             key={`detail-${i}`}
-            bg="gray.800"
+            bg="whiteAlpha.100"
             borderTopColor="yellow.600"
             borderTopWidth="5px"
             borderRadius="lg"
@@ -399,7 +401,7 @@ const AuDetailTableEC: FC<AuDetailTableECProps> = ({
             <span>Pagar {formatCurrency(total)}</span>
           </Button>
           <Heading
-            color="gray.500"
+            color="whiteAlpha.600"
             size="xs"
             textAlign="center"
             paddingTop="0.25em"

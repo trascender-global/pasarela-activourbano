@@ -206,10 +206,10 @@ const Home: NextPageAuth<HomePageProps> = ({ estadosCuenta, fetchError }) => {
                   aria-label="Ordenar por"
                   variant="filled"
                   color="white"
-                  bg="gray.900"
+                  bg="whiteAlpha.100"
                   borderColor="yellow.600"
-                  _hover={{ backgroundColor: 'gray.800' }}
-                  _focus={{ backgroundColor: 'gray.800' }}
+                  _hover={{ backgroundColor: 'whiteAlpha.200' }}
+                  _focus={{ backgroundColor: 'whiteAlpha.300' }}
                   rounded="full"
                   icon={<Icon as={BiFilter} />}
                   defaultValue={0}
@@ -219,7 +219,7 @@ const Home: NextPageAuth<HomePageProps> = ({ estadosCuenta, fetchError }) => {
                     <option
                       key={`order-by-opt-${i}`}
                       value={opt.value}
-                      style={{ backgroundColor: '#1a202c' }}
+                      style={{ backgroundColor: '#222222' }}
                     >
                       {opt.text}
                     </option>
@@ -231,10 +231,11 @@ const Home: NextPageAuth<HomePageProps> = ({ estadosCuenta, fetchError }) => {
                     aria-label="Filtrar"
                     variant="filled"
                     color="white"
-                    bg="gray.900"
+                    bg="whiteAlpha.100"
                     borderColor="yellow.600"
-                    _hover={{ backgroundColor: 'gray.800' }}
-                    _focus={{ backgroundColor: 'gray.800' }}
+                    _hover={{ backgroundColor: 'whiteAlpha.200' }}
+                    _focus={{ backgroundColor: 'whiteAlpha.300' }}
+                    _placeholder={{ color: 'white' }}
                     rounded="full"
                     placeholder="Filtrar"
                     onChange={(e) => setFilter(e.target.value)}
@@ -247,7 +248,7 @@ const Home: NextPageAuth<HomePageProps> = ({ estadosCuenta, fetchError }) => {
             </Box>
             <Show above="lg">
               <Box
-                bg="gray.800"
+                bg="whiteAlpha.100"
                 borderTopColor="yellow.600"
                 borderTopWidth="5px"
                 borderRadius="lg"
