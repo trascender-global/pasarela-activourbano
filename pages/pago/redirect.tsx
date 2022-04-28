@@ -67,7 +67,7 @@ const PaymentCallback: NextPageAuth<RedirectPageProps> = ({ transaction }) => {
         <Box
           display="flex"
           flexDir="column"
-          bg="gray.800"
+          bg="whiteAlpha.100"
           borderTopColor="yellow.600"
           borderTopWidth="5px"
           borderRadius="lg"
