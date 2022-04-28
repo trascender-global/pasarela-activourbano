@@ -7,7 +7,7 @@ const DefaultLayout: FC = ({ children }) => {
 
   return (
     <Box
-      bg="gray.700"
+      bg="blackAlpha.900"
       w="full"
       h="full"
       display="flex"

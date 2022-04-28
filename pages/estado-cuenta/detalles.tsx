@@ -125,6 +125,7 @@ const Detalles: NextPageAuth<DetallesPageProps> = ({ estadoCuenta }) => {
               <IconButton
                 variant="solid"
                 colorScheme="blackAlpha"
+                bgColor="whiteAlpha.100"
                 borderWidth="2px"
                 borderColor="yellow.500"
                 aria-label="Volver al inicio"
@@ -138,6 +139,7 @@ const Detalles: NextPageAuth<DetallesPageProps> = ({ estadoCuenta }) => {
               <Button
                 variant="solid"
                 colorScheme="blackAlpha"
+                bgColor="whiteAlpha.100"
                 borderWidth="2px"
                 borderColor="yellow.500"
                 aria-label="Volver al inicio"
