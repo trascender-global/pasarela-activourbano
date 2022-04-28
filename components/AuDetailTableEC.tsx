@@ -14,11 +14,12 @@ import {
   Th,
   Thead,
   Tr,
+  useToast,
 } from '@chakra-ui/react';
 import ky from 'ky';
 import { useSession } from 'next-auth/react';
 import getConfig from 'next/config';
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import { BiCheckShield } from 'react-icons/bi';
 
 const { publicRuntimeConfig } = getConfig();
@@ -28,12 +29,17 @@ const AuDetailTableEC: FC<AuDetailTableECProps> = ({
   data,
   referencia,
 }) => {
+  const toast = useToast();
   const session = useSession();
 
   const [checkedDetails, setCheckedDetails] = useState(
     Array<boolean>(data.length).fill(false)
   );
 
+  const allVencidosChecked = useMemo(
+    () => data.every((d, i) => (d.valores_Vencidos ? checkedDetails[i] : true)),
+    [data, checkedDetails]
+  );
   const isChecked = checkedDetails.every(Boolean);
   const isIndeterminate = checkedDetails.some(Boolean) && !isChecked;
 
@@ -42,10 +48,7 @@ const AuDetailTableEC: FC<AuDetailTableECProps> = ({
 
   useEffect(() => {
     setTotal(
-      data.reduce((a, b, i) => {
-        if (checkedDetails[i] && b.total > 0) return a + b.total;
-        return a;
-      }, 0)
+      data.reduce((a, b, i) => (checkedDetails[i] ? a + b.total : a), 0)
     );
   }, [checkedDetails, data]);
 
@@ -96,6 +99,19 @@ const AuDetailTableEC: FC<AuDetailTableECProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [total]);
 
+  const showInfoToast = () => {
+    if (!toast.isActive(1)) {
+      toast({
+        id: 1,
+        title: '¡Tienes cuentas vencidas!',
+        description:
+          'Debes pagar las cuentas vencidas antes de pagar las cuentas actuales.',
+        isClosable: true,
+        status: 'info',
+      });
+    }
+  };
+
   // https://docs.wompi.co/docs/en/widget-checkout-web#paso-6-escoge-un-m%C3%A9todo-de-integraci%C3%B3n
   // https://docs.wompi.co/docs/en/widget-checkout-web#bot%C3%B3n-personalizado-opcional
 
@@ -141,6 +157,7 @@ const AuDetailTableEC: FC<AuDetailTableECProps> = ({
                   />
                 </Th>
                 <Th>{headers.nombre_Concepto}</Th>
+                <Th>Estado</Th>
                 <Th isNumeric>{headers.total}</Th>
               </Tr>
             </Thead>
@@ -153,13 +170,19 @@ const AuDetailTableEC: FC<AuDetailTableECProps> = ({
                       isChecked={checkedDetails[i] || d.total < 0}
                       isDisabled={d.total < 0}
                       onChange={(e) => {
-                        if (d.total > 0) checkedDetails[i] = e.target.checked;
-                        else checkedDetails[i] = true;
+                        checkedDetails[i] = e.target.checked;
+                        if (
+                          !allVencidosChecked &&
+                          d.valor_Mes &&
+                          e.target.checked
+                        )
+                          showInfoToast();
                         setCheckedDetails([...checkedDetails]);
                       }}
                     />
                   </Td>
                   <Td>{d.nombre_Concepto}</Td>
+                  <Td>{d.valores_Vencidos ? 'Vencido' : 'Actual'}</Td>
                   <Td isNumeric>{formatCurrency(d.total)}</Td>
                 </Tr>
               ))}
@@ -212,8 +235,9 @@ const AuDetailTableEC: FC<AuDetailTableECProps> = ({
                 isChecked={checkedDetails[i] || d.total < 0}
                 isDisabled={d.total < 0}
                 onChange={(e) => {
-                  if (d.total > 0) checkedDetails[i] = e.target.checked;
-                  else checkedDetails[i] = true;
+                  checkedDetails[i] = e.target.checked;
+                  if (!allVencidosChecked && d.valor_Mes && e.target.checked)
+                    showInfoToast();
                   setCheckedDetails([...checkedDetails]);
                 }}
               />
@@ -226,9 +250,20 @@ const AuDetailTableEC: FC<AuDetailTableECProps> = ({
               <Heading as="span" color="yellow.500" size="sm" textAlign="right">
                 {d.nombre_Concepto}
               </Heading>
-              <Text as="span" textAlign="right">
-                {formatCurrency(d.total)}
-              </Text>
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  justifyContent: 'space-between',
+                }}
+              >
+                <Text as="span" textAlign="right">
+                  {d.valores_Vencidos ? 'Vencido' : 'Actual'}
+                </Text>
+                <Text as="span" textAlign="right">
+                  {formatCurrency(d.total)}
+                </Text>
+              </Box>
             </Box>
           </Box>
         ))}
@@ -393,7 +428,11 @@ const AuDetailTableEC: FC<AuDetailTableECProps> = ({
             isFullWidth
             type="submit"
             isLoading={updatingTotal}
-            disabled={(!isChecked && !isIndeterminate) || updatingTotal}
+            disabled={
+              (!isChecked && !isIndeterminate) ||
+              updatingTotal ||
+              !allVencidosChecked
+            }
           >
             <Icon as={BiCheckShield} marginRight={1} marginTop={0.5} />
             <span>Pagar {formatCurrency(total)}</span>

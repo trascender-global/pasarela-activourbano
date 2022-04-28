@@ -156,7 +156,7 @@ const Detalles: NextPageAuth<DetallesPageProps> = ({ estadoCuenta }) => {
           <Box paddingTop="2em" flexGrow={1} maxW="full">
             <AuDetailTableEC
               headers={detailHeaders}
-              data={estadoCuenta.listaDetalles}
+              data={estadoCuenta.listaDetalles.filter((d) => d.total > 0)}
               referencia={ref as string}
             />
           </Box>
