@@ -3,19 +3,19 @@ runtime: nodejs14
 build:
   env:
     - name: NEXT_PUBLIC_APP_URL
-      value: "https://pagos.activourbano.com.co"
+      value: 'https://pagos.activourbano.com.co'
     - name: NEXT_PUBLIC_API_URL
-      value: "https://zonaclientes.softinm.com/api"
+      value: 'https://zonaclientes.softinm.com/api'
     - name: NEXTAUTH_SECRET
-      value: "HeSkRyCnQLzXR8njyvsGhJ0QrtXUnhauVRhk47UuyNg"
+      value: 'HeSkRyCnQLzXR8njyvsGhJ0QrtXUnhauVRhk47UuyNg'
     - name: NEXTAUTH_URL
-      value: "https://pagos.activourbano.com.co"
+      value: 'https://pagos.activourbano.com.co'
     - name: NEXT_PUBLIC_WOMPI_API_URL
-      value: "https://sandbox.wompi.co/v1"
+      value: 'https://sandbox.wompi.co/v1'
     - name: NEXT_PUBLIC_WOMPI_PUBLIC_KEY
-      value: "pub_test_8G4xcWppoaQMeAIxVW5fMBUK4h2wuZzD"
+      value: 'pub_prod_uUxliGCPQEk6RDKO22DEwtFi1pKUmExw'
     - name: WOMPI_INTEGRITY
-      value: "test_integrity_fvpyB7SAdoGtNjESjiR3X0kP53TWGHBj"
+      value: 'prod_integrity_qKy5ih67MLdIr7BQVLHMDsXuh028dVKy'
   commands:
     build:
       - yarn
@@ -23,19 +23,19 @@ build:
 run:
   env:
     - name: NEXT_PUBLIC_APP_URL
-      value: "https://pagos.activourbano.com.co"
+      value: 'https://pagos.activourbano.com.co'
     - name: NEXT_PUBLIC_API_URL
-      value: "https://zonaclientes.softinm.com/api"
+      value: 'https://zonaclientes.softinm.com/api'
     - name: NEXTAUTH_SECRET
-      value: "HeSkRyCnQLzXR8njyvsGhJ0QrtXUnhauVRhk47UuyNg"
+      value: 'HeSkRyCnQLzXR8njyvsGhJ0QrtXUnhauVRhk47UuyNg'
     - name: NEXTAUTH_URL
-      value: "https://pagos.activourbano.com.co"
+      value: 'https://pagos.activourbano.com.co'
     - name: NEXT_PUBLIC_WOMPI_API_URL
-      value: "https://sandbox.wompi.co/v1"
+      value: 'https://sandbox.wompi.co/v1'
     - name: NEXT_PUBLIC_WOMPI_PUBLIC_KEY
-      value: "pub_test_8G4xcWppoaQMeAIxVW5fMBUK4h2wuZzD"
+      value: 'pub_prod_uUxliGCPQEk6RDKO22DEwtFi1pKUmExw'
     - name: WOMPI_INTEGRITY
-      value: "test_integrity_fvpyB7SAdoGtNjESjiR3X0kP53TWGHBj"
+      value: 'prod_integrity_qKy5ih67MLdIr7BQVLHMDsXuh028dVKy'
   command: yarn start
   network:
     port: 3000
