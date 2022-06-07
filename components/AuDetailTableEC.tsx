@@ -57,7 +57,7 @@ const AuDetailTableEC: FC<AuDetailTableECProps> = ({
     publicKey: publicRuntimeConfig.wompiPublicKey || '',
     currency: 'COP',
     amountInCents: total * 100,
-    reference: referencia + '-' + date.toString(),
+    reference: referencia,
     redirectUrl: publicRuntimeConfig.appUrl + '/pago/redirect',
     customerData: {
       legalIdType: 'CC',

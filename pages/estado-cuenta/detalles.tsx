@@ -78,6 +78,7 @@ export async function getServerSideProps(ctx: NextPageContext) {
 }
 
 const Detalles: NextPageAuth<DetallesPageProps> = ({ estadoCuenta }) => {
+  const date = Date.now().toString();
   const router = useRouter();
   const ref = router.query?.ref;
   const justifyContent = useBreakpointValue({
@@ -159,7 +160,7 @@ const Detalles: NextPageAuth<DetallesPageProps> = ({ estadoCuenta }) => {
             <AuDetailTableEC
               headers={detailHeaders}
               data={estadoCuenta.listaDetalles.filter((d) => d.total > 0)}
-              referencia={ref as string}
+              referencia={(ref + '-' + date) as string}
             />
           </Box>
         </Box>
