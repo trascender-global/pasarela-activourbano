@@ -31,6 +31,7 @@ const AuDetailTableEC: FC<AuDetailTableECProps> = ({
 }) => {
   const toast = useToast();
   const session = useSession();
+  const date = Date.now();
 
   const [checkedDetails, setCheckedDetails] = useState(
     Array<boolean>(data.length).fill(false)
@@ -56,7 +57,7 @@ const AuDetailTableEC: FC<AuDetailTableECProps> = ({
     publicKey: publicRuntimeConfig.wompiPublicKey || '',
     currency: 'COP',
     amountInCents: total * 100,
-    reference: referencia,
+    reference: referencia + '-' + date.toString(),
     redirectUrl: publicRuntimeConfig.appUrl + '/pago/redirect',
     customerData: {
       legalIdType: 'CC',
