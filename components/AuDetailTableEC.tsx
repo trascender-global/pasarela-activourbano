@@ -448,6 +448,14 @@ const AuDetailTableEC: FC<AuDetailTableECProps> = ({
           >
             * Pagos realizados a través de Wompi
           </Heading>
+          <Heading
+            color="whiteAlpha.600"
+            size="xs"
+            textAlign="center"
+            paddingTop="0.25em"
+          >
+            * Señor usuario, recuerde que si paga con tarjeta de crédito debe asumir un recargo del 5% adicional sobre el valor del canon
+          </Heading>
         </form>
       </Box>
     </>
